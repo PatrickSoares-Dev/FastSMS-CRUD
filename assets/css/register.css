@@ -1,0 +1,16 @@
+.wrapper {
+    min-height: 100vh;
+    display: flex; }
+    .wrapper .image-holder {
+      width: 60%; }
+    .wrapper .form-inner {
+      width: 40%; }
+
+  
+  .form-inner {
+    background: #ffff;
+    padding-left: 4vw;
+    padding-right: 4vw; 
+}
+
+
