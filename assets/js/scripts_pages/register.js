@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const inputGroup = field.closest('.input-group'); // Encontra o elemento .input-group pai
 
         if (value === '') {
-            inputGroup.classList.add('is-invalid');
+            field.classList.add('is-invalid');
 
             // Adiciona a mensagem de erro à div
             const errorMessage = document.createElement('div');
