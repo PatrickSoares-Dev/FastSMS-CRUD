@@ -375,8 +375,10 @@
 							</div>
 						</div>
 						<div class="mb-3">
-							<label for="exampleFormControlTextarea1" class="form-label">Endereço</label>
-							<textarea class="form-control" id="text_endereco" rows="2"></textarea>
+							<label for="text_endereco" class="form-label">Endereço</label>
+							<div class="input-group">
+								<textarea class="form-control" id="text_endereco" rows="2"></textarea>
+							</div>						
 						</div>
 						<div class="mb-3">
 							<label class="form-label" for="input_complemento">Complemento</label>
