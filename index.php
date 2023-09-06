@@ -21,6 +21,15 @@
     <link rel="stylesheet" href="assets/css/register.css">
 	
 	<style>
+
+		button:disabled {
+			cursor: not-allowed;
+		}
+
+		button:not(:disabled) {
+			cursor: pointer;
+		}
+
 		.nav-pills .nav-link.active, .nav-pills .nav-link.active:hover, .nav-pills .nav-link.active:focus{
 			background-color: #0071c7;
 		}
@@ -288,13 +297,15 @@
 							<div class="mb-3 col-lg-6 col-md-12 col-sm-12">
 
 								<label for="select_sexo" class="form-label">Sexo</label>
-								<select id="select_sexo" class="form-select">
-									<option disabled selected>Selecione</option>
-									<option value="1">Masculino</option>
-									<option value="2">Feminino</option>
-									<option value="3">Outros</option>
-								</select>
-
+								<div class="input-group input-group-merge">
+									<select id="select_sexo" class="form-select">
+										<option disabled selected>Selecione</option>
+										<option value="1">Masculino</option>
+										<option value="2">Feminino</option>
+										<option value="3">Outros</option>
+									</select>
+								</div>
+								
 							</div>
 						</div>
 						<div class="row">
@@ -344,12 +355,14 @@
 							
 							<div class="mb-3 col-sm-4 col-md-4 col-lg-4">
 								<label for="select_estado" class="form-label">Estado</label>
-								<select id="select_estado" class="form-select">
-									<option disabled selected>UF</option>
-									<option value="1">RJ</option>
-									<option value="2">SP</option>
-									<option value="3">MG</option>
-								</select>
+								<div class="input-group input-group-merge">
+									<select id="select_estado" class="form-select">
+										<option disabled selected>UF</option>
+										<option value="1">RJ</option>
+										<option value="2">SP</option>
+										<option value="3">MG</option>
+									</select>
+								</div>								
 							</div>
 						</div>
 						<div class="row">
@@ -454,7 +467,7 @@
 										name="terms" />
 									<label class="form-check-label" for="terms-conditions">
 										Eu aceito os
-										<a href="javascript:void(0);">termos de privacidade</a>
+										<a href="javascript:void(0);">termos de uso.</a>
 									</label>
 								</div>
 							</div>

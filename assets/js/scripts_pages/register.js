@@ -36,20 +36,62 @@ document.addEventListener('DOMContentLoaded', function () {
         [inputEmail, inputCelular, inputSenha, inputCSenha], btnSubmitForm
     );
 
-    function setupValidation(fields, button) {
-        fields.forEach(input => {
-            input.addEventListener('input', () => validateFieldsAndToggleButton(fields, button));
-            input.addEventListener('blur', () => validateField(input));
+    btnEtapa1.disabled = true;
+    btnEtapa2.disabled = true;
+    btnSubmitForm.disabled = true;
+
+    function applyMasksToFields() {
+        const maskOptions = [
+            { id: 'input_cpf', mask: '000.000.000-00' },
+            { id: 'input_tel', mask: '(00) 0000-0000' },
+            { id: 'input_cep', mask: '00000-000' },
+            { id: 'input_celular', mask: '(00) 00000-0000' }
+        ];
+    
+        maskOptions.forEach(option => {
+            const field = document.getElementById(option.id);
+            if (field) {
+                IMask(field, { mask: option.mask });
+            }
         });
     }
+    
+    // Chame a função para aplicar as máscaras aos campos desejados
+    applyMasksToFields();
+
+    function setupValidation(fields, button) {
+        fields.forEach(input => {
+            // Evento de Button
+            input.addEventListener('input', () => validateFieldsAndToggleButton(fields, button));            
+            input.addEventListener('keydown', () => validateFieldsAndToggleButton(fields, button));
+            input.addEventListener('keyup', () => validateFieldsAndToggleButton(fields, button));
+            input.addEventListener('click', () => validateFieldsAndToggleButton(fields, button));
+            input.addEventListener('focus', () => validateFieldsAndToggleButton(fields, button));
+            
+            // Evento de Fields
+            input.addEventListener('blur', () => validateField(input));
+            input.addEventListener('keydown', () => validateField(input));
+            input.addEventListener('keyup', () => validateField(input));
+            input.addEventListener('click', () => validateField(input));
+            input.addEventListener('focus', () => validateField(input));
+        });
+    }
+    
 
     // Função para validar campos e habilitar/desabilitar botão
     function validateFieldsAndToggleButton(fields, button) {
-        const allFieldsValid = fields.every(field => field.value.trim() !== '');
-        button.disabled = !allFieldsValid;
+        const isFormValid = fields.every(field => {
+            // Verifica se o campo está vazio ou tem a classe 'is-invalid'
+            if (field.value.trim() === '' || field.classList.contains('is-invalid')) {
+                return false; // Este campo não é válido
+            }
+            return true; // Este campo é válido
+        });
+    
+        button.disabled = !isFormValid;
     }
 
-    
+
     function validateField(field) {
         const value = field.value.trim();
         const inputGroup = field.closest('.input-group'); // Encontra o elemento .input-group pai
@@ -77,9 +119,30 @@ document.addEventListener('DOMContentLoaded', function () {
             if (field.classList.contains("is-invalid")) {
                 field.classList.remove("is-invalid");
             }
-
-            if (field === inputCpf) {
-                if (value.length !== 14) {
+            if (field === inputNome || field === inputMae) {
+                if (value.length < 15 || value.length > 80) {
+                    field.classList.add('is-invalid');
+                    inputGroup.classList.add('is-invalid');
+        
+                    const errorMessage = document.createElement('div');
+                    errorMessage.className = 'invalid-feedback';
+                    errorMessage.textContent = 'Este campo deve ter entre 15 e 80 caracteres.';
+                    inputGroup.appendChild(errorMessage);
+                } else {
+                    // Remove qualquer mensagem de erro existente
+                    const existingErrorMessage = inputGroup.querySelector('.invalid-feedback');
+                    if (existingErrorMessage) {
+                        existingErrorMessage.remove();
+                    }
+        
+                    if (field.classList.contains("is-invalid")) {
+                        field.classList.remove("is-invalid");
+                    }
+                }
+            }
+            else if (field === inputCpf) {
+                const cpfRegex = /^\d{3}\.\d{3}\.\d{3}-\d{2}$/;
+                if (!cpfRegex.test(value)) {
                     field.classList.add('is-invalid');
                     inputGroup.classList.add('is-invalid'); // Adiciona a classe à div
 
@@ -90,28 +153,61 @@ document.addEventListener('DOMContentLoaded', function () {
                     inputGroup.appendChild(errorMessage);
                 }
             } else if (field === inputTel) {
-                const telefoneRegex = /^\(\d{2}\) \d{4,5}-\d{4}$/;
+                const telefoneRegex = /^\(\d{2}\) \d{4}-\d{4}$/;
                 if (!telefoneRegex.test(value)) {
                     field.classList.add('is-invalid');
                     inputGroup.classList.add('is-invalid');
-
+            
                     const errorMessage = document.createElement('div');
                     errorMessage.className = 'invalid-feedback';
-                    errorMessage.textContent = 'Telefone inválido. Use o formato (00) 9999-9999 ou (00) 99999-9999.';
+                    errorMessage.textContent = 'Telefone inválido. Use o formato (00) 9999-9999.';
                     inputGroup.appendChild(errorMessage);
+                } else {
+                    // Remova qualquer mensagem de erro existente
+                    const existingErrorMessage = inputGroup.querySelector('.invalid-feedback');
+                    if (existingErrorMessage) {
+                        existingErrorMessage.remove();
+                    }
+            
+                    if (field.classList.contains("is-invalid")) {
+                        field.classList.remove("is-invalid");
+                    }
                 }
-            } else if (field === inputDataNascimento) {
-                const currentDate = new Date();
-                const inputDate = new Date(value);
+            }
+                else if (field === inputCelular) {
+                    const celularRegex = /^\(\d{2}\) \d{5}-\d{4}$/;
+                    if (!celularRegex.test(value)) {
+                        field.classList.add('is-invalid');
+                        inputGroup.classList.add('is-invalid');
+                
+                        const errorMessage = document.createElement('div');
+                        errorMessage.className = 'invalid-feedback';
+                        errorMessage.textContent = 'Celular inválido. Use o formato (00) 99999-9999.';
+                        inputGroup.appendChild(errorMessage);
+                    } else {
+                        // Remova qualquer mensagem de erro existente
+                        const existingErrorMessage = inputGroup.querySelector('.invalid-feedback');
+                        if (existingErrorMessage) {
+                            existingErrorMessage.remove();
+                        }
+                
+                        if (field.classList.contains("is-invalid")) {
+                            field.classList.remove("is-invalid");
+                        }
+                    }
+                } 
+                else if (field === inputDataNascimento) {
+                    const currentDate = new Date();
+                    const inputDate = new Date(value);
 
-                if (!value) {
-                    field.classList.add('is-invalid');
-                    inputGroup.classList.add('is-invalid');
+                    if (!value) {
+                        field.classList.add('is-invalid');
+                        inputGroup.classList.add('is-invalid');
 
-                    const errorMessage = document.createElement('div');
-                    errorMessage.className = 'invalid-feedback';
-                    errorMessage.textContent = 'Campo obrigatório.';
-                    inputGroup.appendChild(errorMessage);
+                        const errorMessage = document.createElement('div');
+                        errorMessage.className = 'invalid-feedback';
+                        errorMessage.textContent = 'Campo obrigatório.';
+                        inputGroup.appendChild(errorMessage);
                 } else if (inputDate > currentDate) {
                     field.classList.add('is-invalid');
                     inputGroup.classList.add('is-invalid');
@@ -131,6 +227,31 @@ document.addEventListener('DOMContentLoaded', function () {
                         errorMessage.className = 'invalid-feedback';
                         errorMessage.textContent = 'O usuário deve ter pelo menos 18 anos de idade.';
                         inputGroup.appendChild(errorMessage);
+                    }
+                }
+            } else if (field === selectSexo) { // Verifica se é o campo selectSexo
+                if (value === 'Selecione') {
+                    field.classList.add('is-invalid');
+        
+                    // Adiciona a mensagem de erro à div
+                    const errorMessage = document.createElement('div');
+                    errorMessage.className = 'invalid-feedback';
+                    errorMessage.textContent = 'Selecione uma opção válida.';
+        
+                    // Verifica se já existe uma mensagem de erro
+                    const existingErrorMessage = inputGroup.querySelector('.invalid-feedback');
+                    if (!existingErrorMessage) {
+                        inputGroup.appendChild(errorMessage);
+                    }
+                } else {
+                    // Remove qualquer mensagem de erro existente
+                    const existingErrorMessage = inputGroup.querySelector('.invalid-feedback');
+                    if (existingErrorMessage) {
+                        existingErrorMessage.remove();
+                    }
+        
+                    if (field.classList.contains("is-invalid")) {
+                        field.classList.remove("is-invalid");
                     }
                 }
             } else if (field === inputEmail) {
@@ -153,6 +274,57 @@ document.addEventListener('DOMContentLoaded', function () {
                     const errorMessage = document.createElement('div');
                     errorMessage.className = 'invalid-feedback';
                     errorMessage.textContent = 'As senhas não coincidem.';
+                    inputGroup.appendChild(errorMessage);
+                }
+            } else if (field === inputCep) {
+                const cepRegex = /^\d{5}-\d{3}$/;
+                if (!cepRegex.test(value)) {
+                    field.classList.add('is-invalid');
+                    inputGroup.classList.add('is-invalid');
+
+                    const errorMessage = document.createElement('div');
+                    errorMessage.className = 'invalid-feedback';
+                    errorMessage.textContent = 'CEP inválido. Use o formato 99999-999.';
+                    inputGroup.appendChild(errorMessage);
+                }
+            } else if (field === selectEstado) {
+                if (value === 'UF') {
+                    field.classList.add('is-invalid');
+                    inputGroup.classList.add('is-invalid');
+                    
+                    const errorMessage = document.createElement('div');
+                    errorMessage.className = 'invalid-feedback';
+                    errorMessage.textContent = 'Selecione um estado válido.';
+                    inputGroup.appendChild(errorMessage);
+                }
+            } else if (field === inputNumeroEndereco) {
+                if (value === '') {
+                    field.classList.add('is-invalid');
+                    inputGroup.classList.add('is-invalid');
+                    
+                    const errorMessage = document.createElement('div');
+                    errorMessage.className = 'invalid-feedback';
+                    errorMessage.textContent = 'Campo obrigatório.';
+                    inputGroup.appendChild(errorMessage);
+                }
+            } else if (field === textEndereco) {
+                if (value === '' || value.length < 5) {
+                    field.classList.add('is-invalid');
+                    inputGroup.classList.add('is-invalid');
+                    
+                    const errorMessage = document.createElement('div');
+                    errorMessage.className = 'invalid-feedback';
+                    errorMessage.textContent = 'Endereço deve conter pelo menos 5 caracteres.';
+                    inputGroup.appendChild(errorMessage);
+                }
+            } else if (field === inputComplemento) {
+                if (value === '' || value.length < 5) {
+                    field.classList.add('is-invalid');
+                    inputGroup.classList.add('is-invalid');
+                    
+                    const errorMessage = document.createElement('div');
+                    errorMessage.className = 'invalid-feedback';
+                    errorMessage.textContent = 'Complemento é obrigatório e deve conter pelo menos 5 caracteres.';
                     inputGroup.appendChild(errorMessage);
                 }
             }
