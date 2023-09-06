@@ -1,64 +1,55 @@
 document.addEventListener('DOMContentLoaded', function () {
-    // Inputs, formulários e botões.
+    // Primeiro formulário
     let inputNome = document.getElementById('input_nome');
     let inputMae = document.getElementById('input_mae');
     let inputCpf = document.getElementById('input_cpf');
-    let selectSexo = document.getElementById('select_sexo');
-    let inputDataNascimento = document.getElementById('input_dataNascimento'); // Correção aqui
+    let inputDataNascimento = document.getElementById('input_dataNascimento');
     let inputTel = document.getElementById('input_tel');
+    let selectSexo = document.getElementById('select_sexo');
+    let btnEtapa1 = document.getElementById('btnEtapa1');
+      
+    setupValidation(
+        [inputNome, inputMae, inputCpf, inputDataNascimento, inputTel, selectSexo], btnEtapa1
+    );
 
+    // Segundo formulário
     let inputCep = document.getElementById('input_cep');
     let selectEstado = document.getElementById('select_estado');
     let inputCidade = document.getElementById('input_cidade');
     let inputNumeroEndereco = document.getElementById('input_numeroEndereco');
     let textEndereco = document.getElementById('text_endereco');
     let inputComplemento = document.getElementById('input_complemento');
+    let btnEtapa2 = document.getElementById('btnEtapa2');
+    
+    setupValidation(
+        [inputCep, selectEstado, inputCidade, inputNumeroEndereco, textEndereco, inputComplemento], btnEtapa2
+    );
 
+    // Terceiro formulário
     let inputEmail = document.getElementById('input_email');
     let inputCelular = document.getElementById('input_celular');
     let inputSenha = document.getElementById('input_senha');
     let inputCSenha = document.getElementById('input_csenha');
     let btnSubmitForm = document.getElementById('btnSubmitForm');
+    
+    setupValidation(
+        [inputEmail, inputCelular, inputSenha, inputCSenha], btnSubmitForm
+    );
 
-    let btnEtapa1 = document.getElementById('btnEtapa1');
-    let btnEtapa2 = document.getElementById('btnEtapa2');
-
-    btnEtapa2.addEventListener('click', nextTab);
-
-    btnEtapa1.disabled = true;
-
-    const cpfMask = IMask(document.getElementById('input_cpf'), {
-        mask: '000.000.000-00'
-    });
-
-    const phoneMask = IMask(document.getElementById('input_tel'), {
-        mask: '(00) 00000-0000'
-    });
-
-    // Adicionar um evento de input para os campos
-    [inputNome, inputMae, inputCpf, inputDataNascimento, inputTel].forEach(input => {
-        input.addEventListener('input', validateFieldsAndToggleButton);
-        input.addEventListener('blur', () => validateField(input));
-    });
-
-    function validateFieldsAndToggleButton() {
-        const fieldsToValidate = [
-            inputNome,
-            inputMae,
-            inputCpf,
-            inputDataNascimento,
-            inputTel
-        ];
-
-        const allFieldsValid = fieldsToValidate.every(field => field.value.trim() !== '');
-
-        if (allFieldsValid) {
-            btnEtapa1.disabled = false;
-        } else {
-            btnEtapa1.disabled = true;
-        }
+    function setupValidation(fields, button) {
+        fields.forEach(input => {
+            input.addEventListener('input', () => validateFieldsAndToggleButton(fields, button));
+            input.addEventListener('blur', () => validateField(input));
+        });
     }
 
+    // Função para validar campos e habilitar/desabilitar botão
+    function validateFieldsAndToggleButton(fields, button) {
+        const allFieldsValid = fields.every(field => field.value.trim() !== '');
+        button.disabled = !allFieldsValid;
+    }
+
+    
     function validateField(field) {
         const value = field.value.trim();
         const inputGroup = field.closest('.input-group'); // Encontra o elemento .input-group pai
@@ -142,6 +133,28 @@ document.addEventListener('DOMContentLoaded', function () {
                         inputGroup.appendChild(errorMessage);
                     }
                 }
+            } else if (field === inputEmail) {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(value)) {
+                    field.classList.add('is-invalid');
+                    inputGroup.classList.add('is-invalid');
+
+                    const errorMessage = document.createElement('div');
+                    errorMessage.className = 'invalid-feedback';
+                    errorMessage.textContent = 'Email inválido.';
+                    inputGroup.appendChild(errorMessage);
+                }
+            } else if (field === inputCSenha) {
+                const senha = inputSenha.value.trim();
+                if (value !== senha) {
+                    field.classList.add('is-invalid');
+                    inputGroup.classList.add('is-invalid');
+
+                    const errorMessage = document.createElement('div');
+                    errorMessage.className = 'invalid-feedback';
+                    errorMessage.textContent = 'As senhas não coincidem.';
+                    inputGroup.appendChild(errorMessage);
+                }
             }
         }
     }
@@ -150,40 +163,9 @@ document.addEventListener('DOMContentLoaded', function () {
         nextTab();
     });
 
-    const camposFormulario2 = [
-        inputCep,
-        selectEstado,
-        inputCidade,
-        inputNumeroEndereco,
-        textEndereco,
-        inputComplemento
-    ];
-    
-    camposFormulario2.forEach(input => {
-        input.addEventListener('input', validateFieldsAndToggleBtn2);
-        input.addEventListener('blur', () => validateField(input));
+    btnEtapa2.addEventListener('click', function () {
+        nextTab();
     });
-    
-
-    function validateFieldsAndToggleBtn1() {
-        const allFieldsValid = camposFormulario1.every(field => field.value.trim() !== '');
-
-        if (allFieldsValid) {
-            btnEtapa1.disabled = false;
-        } else {
-            btnEtapa1.disabled = true;
-        }
-    }
-
-    function validateFieldsAndToggleBtn2() {
-        const allFieldsValid = camposFormulario2.every(field => field.value.trim() !== '');
-
-        if (allFieldsValid) {
-            btnEtapa2.disabled = false;
-        } else {
-            btnEtapa2.disabled = true;
-        }
-    }
 
     function nextTab() {
         // Encontra a tab ativa atual e sua próxima tab
