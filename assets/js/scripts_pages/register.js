@@ -1,4 +1,8 @@
 document.addEventListener('DOMContentLoaded', function () {
+
+    let etapaAtual = 1;
+    let usuario = {}; 
+
     // Primeiro formulário
     let inputNome = document.getElementById('input_nome');
     let inputMae = document.getElementById('input_mae');
@@ -332,12 +336,50 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     btnEtapa1.addEventListener('click', function () {
-        nextTab();
+        if (etapaAtual === 1 || etapaAtual === 2) {
+            // Salvar informações do Formulário 1 no objeto de usuário
+            usuario.nome = inputNome.value;
+            usuario.mae = inputMae.value;
+            usuario.cpf = inputCpf.value;
+            usuario.dataNascimento = inputDataNascimento.value;
+            usuario.tel = inputTel.value;
+            usuario.sexo = selectSexo.value;
+
+            nextTab();
+            etapaAtual = 2;
+        }
     });
 
     btnEtapa2.addEventListener('click', function () {
-        nextTab();
+        if (etapaAtual === 2 || etapaAtual === 3) {
+            // Salvar informações do Formulário 2 no objeto de usuário
+            usuario.cep = inputCep.value;
+            usuario.estado = selectEstado.value;
+            usuario.cidade = inputCidade.value;
+            usuario.numeroEndereco = inputNumeroEndereco.value;
+            usuario.endereco = textEndereco.value;
+            usuario.complemento = inputComplemento.value;
+
+            nextTab();
+            etapaAtual = 3;
+        }
     });
+
+    btnSubmitForm.addEventListener('click', function () {
+        // Salvar informações do Formulário 3 no objeto de usuário
+        usuario.email = inputEmail.value;
+        usuario.celular = inputCelular.value;
+        usuario.senha = inputSenha.value; // Adicione a senha ao objeto de usuário
+
+        // Enviar objeto de usuário via AJAX para o backend
+        enviarDadosParaBancoDeDados(usuario);
+    });
+
+    // ...
+
+    function enviarDadosParaBancoDeDados(usuario) {
+        console.log('Enviando dados para o banco de dados:', usuario);
+    }
 
     function nextTab() {
         // Encontra a tab ativa atual e sua próxima tab
