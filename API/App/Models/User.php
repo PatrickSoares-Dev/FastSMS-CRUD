@@ -57,29 +57,60 @@ class User
     public static function registerNewUser($data)
     {
         $connPdo = new \PDO(DBDRIVE . ': host=' . DBHOST . '; dbname=' . DBNAME, DBUSER, DBPASS);
-    
-        $sql = 'INSERT INTO ' . self::$table . ' (nome, data_nascimento, sexo, nome_materno, cpf, celular, telefone_fixo, cep, endereco, cidade, estado, login, senha, tipo_user) VALUES (:nome, :data_nascimento, :sexo, :nome_materno, :cpf, :celular, :telefone_fixo, :cep, :endereco, :cidade, :estado, :login, :senha, :tipo_user)';
-        $stmt = $connPdo->prepare($sql);
-        $stmt->bindValue(':nome', $data['nome']);
-        $stmt->bindValue(':data_nascimento', $data['data_nascimento']);
-        $stmt->bindValue(':sexo', $data['sexo']);
-        $stmt->bindValue(':nome_materno', $data['nome_materno']);
-        $stmt->bindValue(':cpf', $data['cpf']);
-        $stmt->bindValue(':celular', $data['celular']);
-        $stmt->bindValue(':telefone_fixo', $data['telefone_fixo']);
-        $stmt->bindValue(':cep', $data['cep']);
-        $stmt->bindValue(':endereco', $data['endereco']);
-        $stmt->bindValue(':cidade', $data['cidade']);
-        $stmt->bindValue(':estado', $data['estado']);
-        $stmt->bindValue(':login', $data['login']);
-        $stmt->bindValue(':senha', $data['senha']);
-        $stmt->bindValue(':tipo_user', 'User'); // Definindo 'User' como valor padrão para tipo_user
-        $stmt->execute();
 
-        if ($stmt->rowCount() > 0) {
-            return 'Usuário(a) inserido com sucesso!';
+        // Verifica se já existe um usuário com o mesmo login ou email
+        $checkUserQuery = 'SELECT * FROM ' . self::$table . ' WHERE login = :login OR email = :email';
+        $stmtCheckUser = $connPdo->prepare($checkUserQuery);
+        $stmtCheckUser->bindValue(':login', $data['login']);
+        $stmtCheckUser->bindValue(':email', $data['email']); // Supondo que o email seja fornecido no array $data
+        $stmtCheckUser->execute();
+
+        if ($stmtCheckUser->rowCount() > 0) {
+            // Retorna todos os campos duplicados de dados sensíveis
+            $duplicates = [];
+            while ($row = $stmtCheckUser->fetch(\PDO::FETCH_ASSOC)) {
+                $duplicate = [
+                    'cpf' => $row['cpf'],
+                    'celular' => $row['celular'],
+                    'login' => $row['login'],
+                    'email' => $row['email']
+                ];
+                $duplicates[] = $duplicate;
+            }
+        
+            // Define o código de status HTTP 409 Conflict e retorna os detalhes das duplicatas
+            http_response_code(409);
+            return [
+                'status' => '409', // Alterado para retornar o código de status diretamente
+                'message' => 'Itens duplicados',
+                'data' => $duplicates
+            ];               
         } else {
-            throw new \Exception("Falha ao inserir usuário(a)!");
+            // Se não houver duplicatas, prossiga com a inserção do usuário
+            $insertUserQuery = 'INSERT INTO ' . self::$table . ' (nome, data_nascimento, sexo, nome_materno, cpf, celular, telefone_fixo, cep, endereco, cidade, estado, login, senha, tipo_user, email) VALUES (:nome, :data_nascimento, :sexo, :nome_materno, :cpf, :celular, :telefone_fixo, :cep, :endereco, :cidade, :estado, :login, :senha, :tipo_user, :email)';
+            $stmtInsertUser = $connPdo->prepare($insertUserQuery);
+            $stmtInsertUser->bindValue(':nome', $data['nome']);
+            $stmtInsertUser->bindValue(':data_nascimento', $data['data_nascimento']);
+            $stmtInsertUser->bindValue(':sexo', $data['sexo']);
+            $stmtInsertUser->bindValue(':nome_materno', $data['nome_materno']);
+            $stmtInsertUser->bindValue(':cpf', $data['cpf']);
+            $stmtInsertUser->bindValue(':celular', $data['celular']);
+            $stmtInsertUser->bindValue(':telefone_fixo', $data['telefone_fixo']);
+            $stmtInsertUser->bindValue(':cep', $data['cep']);
+            $stmtInsertUser->bindValue(':endereco', $data['endereco']);
+            $stmtInsertUser->bindValue(':cidade', $data['cidade']);
+            $stmtInsertUser->bindValue(':estado', $data['estado']);
+            $stmtInsertUser->bindValue(':login', $data['login']);
+            $stmtInsertUser->bindValue(':senha', $data['senha']);
+            $stmtInsertUser->bindValue(':tipo_user', 'User'); // Definindo 'User' como valor padrão para tipo_user
+            $stmtInsertUser->bindValue(':email', $data['email']);
+            $stmtInsertUser->execute();
+
+            if ($stmtInsertUser->rowCount() > 0) {
+                return 'Usuário(a) inserido com sucesso!';
+            } else {
+                throw new \Exception("Falha ao inserir usuário(a)!");
+            }
         }
     }
 
