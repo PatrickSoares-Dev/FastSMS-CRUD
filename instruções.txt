@@ -18,3 +18,24 @@ php composer.phar install
 composer require twig/twig
 
 https://twig.symfony.com/doc/2.x/api.html
+
+Em outra máquina:
+
+Reinstale o composer
+
+Remove-Item -Path "C:\xampp\htdocs\FastSMS\vendor" -Recurse -Force
+Remove-Item -Path "C:\xampp\htdocs\FastSMS\composer.lock" -Force
+
+composer install
+
+no arquivo composer.json
+"symfony/polyfill-ctype": "^1.22"
+
+assim:
+
+{
+    "require": {
+        "twig/twig": "^3.7",
+        "symfony/polyfill-ctype": "^1.22"
+    }
+}
