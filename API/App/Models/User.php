@@ -84,48 +84,55 @@ class User
     }
 
     /**
-     * Atualiza um usuário existente pelo ID.
-     * @param int $id O ID do usuário a ser atualizado.
-     * @param array $data Os dados a serem atualizados.
+     * Atualiza um usuário existente pelo ID e dados fornecidos no corpo JSON.
+     * @param array $requestData Os dados da solicitação JSON que contém o ID e os dados a serem atualizados.
      * @return string Uma mensagem de sucesso.
      * @throws \Exception Se a atualização falhar.
      */
-    public static function updateUserById(int $id, $data)
+    public static function updateUserById($requestData)
     {
+        if (!isset($requestData['id']) || !isset($requestData['data'])) {
+            throw new \Exception("Dados incompletos na solicitação.");
+        }
+
+        $id = $requestData['id'];
+        $data = $requestData['data'];
+
         $connPdo = new \PDO(DBDRIVE . ': host=' . DBHOST . '; dbname=' . DBNAME, DBUSER, DBPASS);
-    
+
         $fieldsToUpdate = array_keys($data);
         $validFields = ['nome', 'data_nascimento', 'sexo', 'nome_materno', 'cpf', 'celular', 'telefone_fixo', 'cep', 'endereco', 'cidade', 'estado', 'login', 'senha', 'tipo_user'];
-    
+
         // Filtra apenas os campos válidos fornecidos nos dados de entrada
         $fieldsToUpdate = array_intersect($fieldsToUpdate, $validFields);
-    
+
         if (empty($fieldsToUpdate)) {
             throw new \Exception("Nenhum campo válido para atualização fornecido!");
         }
-    
+
         $sql = 'UPDATE ' . self::$table . ' SET ';
         foreach ($fieldsToUpdate as $field) {
             $sql .= $field . ' = :' . $field . ', ';
         }
         $sql = rtrim($sql, ', ') . ' WHERE id = :id';
-    
+
         $stmt = $connPdo->prepare($sql);
         $stmt->bindValue(':id', $id);
-    
+
         // Bind dos valores dos campos a serem atualizados
         foreach ($fieldsToUpdate as $field) {
             $stmt->bindValue(':' . $field, $data[$field]);
         }
-    
+
         $stmt->execute();
-    
+
         if ($stmt->rowCount() > 0) {
             return 'Usuário(a) atualizado com sucesso!';
         } else {
             throw new \Exception("Falha ao atualizar usuário(a)!");
         }
     }
+
     
     /**
      * Exclui um usuário pelo ID.
