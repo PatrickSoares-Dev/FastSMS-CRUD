@@ -62,7 +62,7 @@ class User
         $checkUserQuery = 'SELECT * FROM ' . self::$table . ' WHERE login = :login OR email = :email';
         $stmtCheckUser = $connPdo->prepare($checkUserQuery);
         $stmtCheckUser->bindValue(':login', $data['login']);
-        $stmtCheckUser->bindValue(':email', $data['email']); // Supondo que o email seja fornecido no array $data
+        $stmtCheckUser->bindValue(':email', $data['email']);
         $stmtCheckUser->execute();
 
         if ($stmtCheckUser->rowCount() > 0) {
@@ -77,30 +77,31 @@ class User
                 ];
                 $duplicates[] = $duplicate;
             }
-        
+
             // Define o código de status HTTP 409 Conflict e retorna os detalhes das duplicatas
             http_response_code(409);
             return [
                 'status' => '409', // Alterado para retornar o código de status diretamente
                 'message' => 'Itens duplicados',
                 'data' => $duplicates
-            ];               
+            ];
         } else {
             // Se não houver duplicatas, prossiga com a inserção do usuário
-            $insertUserQuery = 'INSERT INTO ' . self::$table . ' (nome, data_nascimento, sexo, nome_materno, cpf, celular, telefone_fixo, cep, endereco, cidade, estado, login, senha, tipo_user, email) VALUES (:nome, :data_nascimento, :sexo, :nome_materno, :cpf, :celular, :telefone_fixo, :cep, :endereco, :cidade, :estado, :login, :senha, :tipo_user, :email)';
+            $insertUserQuery = 'INSERT INTO ' . self::$table . ' (nome, dataNascimento, sexo, nome_materno, cpf, celular, telefone_fixo, cep, endereco, cidade, estado, login, senha, tipo_user, email) VALUES (:nome, :dataNascimento, :sexo, :nome_materno, :cpf, :celular, :telefone_fixo, :cep, :endereco, :cidade, :estado, :login, :senha, :tipo_user, :email)';
             $stmtInsertUser = $connPdo->prepare($insertUserQuery);
             $stmtInsertUser->bindValue(':nome', $data['nome']);
-            $stmtInsertUser->bindValue(':data_nascimento', $data['data_nascimento']);
+            $stmtInsertUser->bindValue(':dataNascimento', $data['dataNascimento']);
             $stmtInsertUser->bindValue(':sexo', $data['sexo']);
-            $stmtInsertUser->bindValue(':nome_materno', $data['nome_materno']);
+            $stmtInsertUser->bindValue(':nome_materno', $data['mae']);
             $stmtInsertUser->bindValue(':cpf', $data['cpf']);
             $stmtInsertUser->bindValue(':celular', $data['celular']);
-            $stmtInsertUser->bindValue(':telefone_fixo', $data['telefone_fixo']);
+            $stmtInsertUser->bindValue(':telefone_fixo', $data['tel']);
             $stmtInsertUser->bindValue(':cep', $data['cep']);
+            $stmtInsertUser->bindValue(':numeroEndereco', $data['numeroEndereco']);
             $stmtInsertUser->bindValue(':endereco', $data['endereco']);
             $stmtInsertUser->bindValue(':cidade', $data['cidade']);
             $stmtInsertUser->bindValue(':estado', $data['estado']);
-            $stmtInsertUser->bindValue(':login', $data['login']);
+            $stmtInsertUser->bindValue(':login', $data['login']); // Adicionando o campo "login"
             $stmtInsertUser->bindValue(':senha', $data['senha']);
             $stmtInsertUser->bindValue(':tipo_user', 'User'); // Definindo 'User' como valor padrão para tipo_user
             $stmtInsertUser->bindValue(':email', $data['email']);

@@ -31,13 +31,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Terceiro formulário
     let inputEmail = document.getElementById('input_email');
+    let inputLogin = document.getElementById('input_login');
     let inputCelular = document.getElementById('input_celular');
     let inputSenha = document.getElementById('input_senha');
     let inputCSenha = document.getElementById('input_csenha');
     let btnSubmitForm = document.getElementById('btnSubmitForm');
     
     setupValidation(
-        [inputEmail, inputCelular, inputSenha, inputCSenha], btnSubmitForm
+        [inputEmail, inputLogin, inputCelular, inputSenha, inputCSenha], btnSubmitForm
     );
 
     btnEtapa1.disabled = true;
@@ -269,15 +270,27 @@ document.addEventListener('DOMContentLoaded', function () {
                     errorMessage.textContent = 'Email inválido.';
                     inputGroup.appendChild(errorMessage);
                 }
-            } else if (field === inputCSenha) {
-                const senha = inputSenha.value.trim();
-                if (value !== senha) {
+             else if(field === inputLogin){
+                const loginRegex = /^[a-zA-Z]{6}$/;
+                if (!loginRegex.test(value)) {
                     field.classList.add('is-invalid');
                     inputGroup.classList.add('is-invalid');
 
                     const errorMessage = document.createElement('div');
                     errorMessage.className = 'invalid-feedback';
-                    errorMessage.textContent = 'As senhas não coincidem.';
+                    errorMessage.textContent = 'O login deve conter exatamente 6 caracteres alfabéticos.';
+                    inputGroup.appendChild(errorMessage);
+                }
+             }
+            } else if (field === inputSenha) {
+                const senhaRegex = /^[a-zA-Z]{8}$/;
+                if (!senhaRegex.test(value)) {
+                    field.classList.add('is-invalid');
+                    inputGroup.classList.add('is-invalid');
+    
+                    const errorMessage = document.createElement('div');
+                    errorMessage.className = 'invalid-feedback';
+                    errorMessage.textContent = 'A senha deve conter exatamente 8 caracteres alfabéticos.';
                     inputGroup.appendChild(errorMessage);
                 }
             } else if (field === inputCep) {
@@ -369,17 +382,28 @@ document.addEventListener('DOMContentLoaded', function () {
         // Salvar informações do Formulário 3 no objeto de usuário
         usuario.email = inputEmail.value;
         usuario.celular = inputCelular.value;
-        usuario.senha = inputSenha.value; // Adicione a senha ao objeto de usuário
-
+        usuario.senha = inputSenha.value;
+    
         // Enviar objeto de usuário via AJAX para o backend
         enviarDadosParaBancoDeDados(usuario);
     });
-
-    // ...
-
+    
     function enviarDadosParaBancoDeDados(usuario) {
-        console.log('Enviando dados para o banco de dados:', usuario);
+        console.log(usuario)
+        $.ajax({
+            url: 'http://localhost/FastSMS/API/public_html/api/user/registerNewUser',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(usuario),
+            success: function (response) {
+                alert('Resposta do servidor: ' + response.message);
+            },
+            error: function (xhr, status, error) {
+                alert('Erro ao registrar usuário: ' + xhr.responseText);
+            }
+        });
     }
+    
 
     function nextTab() {
         // Encontra a tab ativa atual e sua próxima tab

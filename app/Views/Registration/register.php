@@ -3,23 +3,6 @@
     <title>Registre-se</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="assets/img/favicon/favicon.ico" />
-
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
-        rel="stylesheet" />
-
-    <!-- CSS -->
-    <link rel="stylesheet" href="assets/vendor/fonts/boxicons.css" />
-    <link rel="stylesheet" href="assets/vendor/css/core.css" class="template-customizer-core-css" />
-    <link rel="stylesheet" href="assets/vendor/css/theme-default.css" class="template-customizer-theme-css" />
-    <link rel="stylesheet" href="assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
-    <link rel="stylesheet" href="assets/css/demo.css" />
-    <link rel="stylesheet" href="assets/css/register.css">
-	
 	<style>
 
 		button:disabled {
@@ -467,6 +450,14 @@
 									<span class="input-group-text" id="basic-addon33">@example.com</span>
 								</div>
 							</div>
+							
+							<div class="mb-3">
+								<label class="form-label" for="input_login">Login</label>
+								<div class="input-group input-group-merge">
+									<input type="text" class="form-control" placeholder="patrick.oliveira"
+										aria-label="patrick.oliveira" aria-describedby="input_login" id="input_login" />
+								</div>
+							</div>
 
 							<div class="mb-3">
 								<label class="form-label" for="input_celular">Celular</label>
@@ -484,7 +475,7 @@
 									<div class="input-group input-group-merge">
 										<input type="password" class="form-control" id="input_senha"
 											placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
-											aria-describedby="input_senha" autocomplete="new-password" />
+											aria-describedby="input_senha" autocomplete="new-password" maxlength="8"/>
 										<span class="input-group-text cursor-pointer" id="basic-default-password"><i
 												class="bx bx-hide"></i></span>
 									</div>
@@ -496,7 +487,7 @@
 									<div class="input-group input-group-merge">
 										<input type="password" class="form-control" id="input_csenha"
 											placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
-											aria-describedby="input_csenha" />
+											aria-describedby="input_csenha" maxlength="8"/>
 										<span class="input-group-text cursor-pointer" id="basic-default-password"><i
 												class="bx bx-hide"></i></span>
 									</div>
@@ -512,7 +503,7 @@
 									</label>
 								</div>
 							</div>
-							<button type="submit" class="btn btn-primary w-100 mt-1" id="btnSubmitForm">Finalizar Cadastro</button>
+							<button type="button" class="btn btn-primary w-100 mt-1" id="btnSubmitForm">Finalizar Cadastro</button>
 						</form>
 						<p class="text-center" style="margin-top: 15px; margin-bottom: -10px;">
 							<span>Já tem uma conta?</span>
@@ -528,19 +519,8 @@
 	</div>
 	</div>
 	
-	<script src="assets/js/jquery-3.3.1.min.js"></script>
-	<script src="assets/js/jquery.form-validator.min.js"></script>
-	<script src="assets/js/main.js"></script>
-	<script src="assets/vendor/libs/jquery/jquery.js"></script>
-	<script src="assets/vendor/libs/popper/popper.js"></script>
-	<script src="assets/vendor/js/bootstrap.js"></script>
-	<script src="assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/imask/6.0.5/imask.min.js"></script>	
-	<script src="assets/vendor/js/menu.js"></script>
-	<script src="assets/js/main.js"></script>
-	<script src="assets/js/scripts_pages/register.js"></script>
-	<script async defer src="https://buttons.github.io/buttons.js"></script>
 
+	<script src="assets/js/scripts_pages/register.js"></script>
 </body>
 
 </html>
