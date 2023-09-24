@@ -1,13 +1,14 @@
 {
     "autoload": {
         "psr-4": {
-            "App\\":"App"
+            "App\\": "App"
         },
         "files": [
-        	"config.php"
+            "config.php"
         ]
     },
     "require": {
-        "firebase/php-jwt": "^6.8"
+        "firebase/php-jwt": "^6.8",
+        "symfony/polyfill-ctype": "^1.23"
     }
 }

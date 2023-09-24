@@ -21,6 +21,17 @@ Antes de começar, verifique se você possui os seguintes requisitos instalados:
 - [Postman](https://www.postman.com/) (para testar os endpoints da API)
 
 
+## OBRIGATÓRIO A CADA NOVO CLONE DO PROJETO
+```
+ Você deve executar os comandos do Composer no diretório raiz do projeto. /FastSMS
+
+Execute:
+
+Remove-Item -Recurse -Force vendor
+composer install
+
+```
+
 ## Banco de dados
 
 1. Abra o arquivo `.config.php` no diretório do API do projeto.
