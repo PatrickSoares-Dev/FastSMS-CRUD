@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {
     "version": "0.2.0",
     "configurations": [
@@ -13,3 +14,20 @@
         }
     ]
 }
+=======
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Listen for XDebug",
+            "type": "php",
+            "request": "launch",
+            "port": 9000,
+            "pathMappings": {
+                "/c/xampp/htdocs/FastSMS/API": "${workspaceFolder}"
+            },
+            "log": true
+        }
+    ]
+}
+>>>>>>> e0011e9971c696fac3bdaa00eb3248b24ec8db18
