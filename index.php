@@ -8,6 +8,7 @@
     require_once 'vendor/autoload.php';
 
     $requestUri = $_SERVER['REQUEST_URI'];
+    http://localhost/FastSMS/?pagina=home
     $requestUri = explode('?', $requestUri)[0]; 
 
     $urlParts = explode('/', trim($requestUri, '/'));

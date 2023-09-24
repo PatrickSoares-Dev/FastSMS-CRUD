@@ -1,29 +1,29 @@
 <?php
 
-class UsersModel
-{
-    public static function GetAllUsers()
-    {
-        $Connection = Connection::getConnection();
+// class UsersModel
+// {
+//     public static function GetAllUsers()
+//     {
+//         $Connection = Connection::getConnection();
 
-        $sql = "SELECT * FROM usuarios ORDER BY id DESC";
-        $sql = $Connection -> prepare($sql);
-        $sql->execute();
+//         $sql = "SELECT * FROM usuarios ORDER BY id DESC";
+//         $sql = $Connection -> prepare($sql);
+//         $sql->execute();
 
-        $resultado = array();
+//         $resultado = array();
 
-        while ($row = $sql->fetchObject('UsersModel'))
-        {
-            $resultado[] = $row;
-        }
+//         while ($row = $sql->fetchObject('UsersModel'))
+//         {
+//             $resultado[] = $row;
+//         }
 
-        if(!$resultado){
-            throw new Exception ("Não foi encontrado nenhum usuário no banco de dados");
-        }
+//         if(!$resultado){
+//             throw new Exception ("Não foi encontrado nenhum usuário no banco de dados");
+//         }
 
-        return $resultado;
+//         return $resultado;
 
-    }
-}
+//     }
+// }
 
-?>
+?> 

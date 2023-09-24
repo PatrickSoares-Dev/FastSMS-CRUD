@@ -1,5 +1,6 @@
 {
     "require": {
-        "twig/twig": "^3.7"
+        "twig/twig": "^3.7",
+        "symfony/polyfill-ctype": "^1.22"
     }
 }
