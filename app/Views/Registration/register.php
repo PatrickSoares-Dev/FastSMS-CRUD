@@ -330,6 +330,7 @@
 						</div>
 
 						<button type="button" class="btn btn-primary w-100 mt-2" id="btnEtapa1">Próxima etapa</button>
+						<button type="button" class="btn btn-primary w-100 mt-2" id="btnEtapaEnviar">Enviar</button>
 					</form>
 					<p class="text-center" style="margin-top: 15px; margin-bottom: -10px;">
 						<span>Já tem uma conta?</span>

@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', function () {
 
     let etapaAtual = 1;
-    let usuario = {}; 
+    let usuario = {}; // Objeto de usuário
 
     // Primeiro formulário
     let inputNome = document.getElementById('input_nome');
@@ -74,6 +74,7 @@ document.addEventListener('DOMContentLoaded', function () {
             input.addEventListener('focus', () => validateFieldsAndToggleButton(fields, button));
             
             // Evento de Fields
+            input.addEventListener('input', () => validateField(input));
             input.addEventListener('blur', () => validateField(input));
             input.addEventListener('keydown', () => validateField(input));
             input.addEventListener('keyup', () => validateField(input));
@@ -357,12 +358,12 @@ document.addEventListener('DOMContentLoaded', function () {
             usuario.dataNascimento = inputDataNascimento.value;
             usuario.tel = inputTel.value;
             usuario.sexo = selectSexo.value;
-
+    
             nextTab();
             etapaAtual = 2;
         }
     });
-
+    
     btnEtapa2.addEventListener('click', function () {
         if (etapaAtual === 2 || etapaAtual === 3) {
             // Salvar informações do Formulário 2 no objeto de usuário
@@ -372,33 +373,70 @@ document.addEventListener('DOMContentLoaded', function () {
             usuario.numeroEndereco = inputNumeroEndereco.value;
             usuario.endereco = textEndereco.value;
             usuario.complemento = inputComplemento.value;
-
+    
             nextTab();
             etapaAtual = 3;
         }
     });
-
-    btnSubmitForm.addEventListener('click', function () {
-        // Salvar informações do Formulário 3 no objeto de usuário
-        usuario.email = inputEmail.value;
-        usuario.celular = inputCelular.value;
-        usuario.senha = inputSenha.value;
     
-        // Enviar objeto de usuário via AJAX para o backend
-        enviarDadosParaBancoDeDados(usuario);
+    btnSubmitForm.addEventListener('click', function () {
+        // Valide se todos os campos obrigatórios estão preenchidos
+        if (
+            inputNome.value && inputMae.value && inputCpf.value &&
+            inputDataNascimento.value && inputTel.value && selectSexo.value &&
+            inputCep.value && selectEstado.value && inputCidade.value &&
+            inputNumeroEndereco.value && textEndereco.value && inputEmail.value &&
+            inputLogin.value && inputCelular.value && inputSenha.value
+        ) {
+            // Salvar informações do Formulário 3 no objeto de usuário
+            usuario.email = inputEmail.value;
+            usuario.login = inputLogin.value;
+            usuario.celular = inputCelular.value;
+            usuario.senha = inputSenha.value;
+            usuario.tipo_user = 'User'; // Definindo 'User' como valor padrão para tipo_user
+        
+            // Formate os dados conforme necessário
+            let formattedData = {
+                nome: usuario.nome,
+                mae: usuario.mae,
+                cpf: usuario.cpf,
+                dataNascimento: usuario.dataNascimento,
+                tel: usuario.tel,
+                sexo: usuario.sexo,
+                cep: usuario.cep,
+                estado: usuario.estado,
+                cidade: usuario.cidade,
+                numeroEndereco: usuario.numeroEndereco,
+                endereco: usuario.endereco,
+                complemento: usuario.complemento,
+                email: usuario.email,
+                login: usuario.login,
+                celular: usuario.celular,
+                senha: usuario.senha,
+                tipo_user: usuario.tipo_user
+            };
+        
+            // Enviar objeto de usuário formatado via AJAX para o backend
+            enviarDadosParaBancoDeDados(formattedData);
+        } else {
+            alert('Preencha todos os campos obrigatórios antes de enviar o formulário.');
+        }
     });
     
-    function enviarDadosParaBancoDeDados(usuario) {
-        console.log(usuario)
+    
+    function enviarDadosParaBancoDeDados(data) {
+        // Enviar o objeto de usuário formatado como JSON diretamente para a API
+        console.log(data)
         $.ajax({
             url: 'http://localhost/FastSMS/API/public_html/api/user/registerNewUser',
             type: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify(usuario),
+            contentType: 'application/json', // Define o tipo de conteúdo como JSON
+            data: JSON.stringify(data), // Converte o objeto em JSON
             success: function (response) {
                 alert('Resposta do servidor: ' + response.message);
             },
             error: function (xhr, status, error) {
+                console.log(xhr.responseText);
                 alert('Erro ao registrar usuário: ' + xhr.responseText);
             }
         });

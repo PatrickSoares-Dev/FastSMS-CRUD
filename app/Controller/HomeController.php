@@ -12,7 +12,7 @@ class HomeController
             $template = $twig->load('register.php');
 
             $parametros = array();
-            $parametros['nome'] = 'Patrick';
+
 
             $conteudo = $template-> render ($parametros);
             echo($conteudo); 
