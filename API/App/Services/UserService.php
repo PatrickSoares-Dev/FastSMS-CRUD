@@ -9,22 +9,21 @@ class UserService
     public function processRequest($url, $queryParams)
     {
         $endpoint = array_shift($url);
-
+    
         switch ($endpoint) {
             case 'getUser':
                 return $this->getUser($queryParams);
-            case 'registerNewUser':
-                return $this->registerNewUser();
-            case 'updateUserById':
-                return $this->updateUserById($queryParams);
             case 'deleteUserById':
                 return $this->deleteUserById($queryParams);
             case 'userLogin':
                 return $this->userLogin();
+            case 'registerUser':
+                return $this->registerUser();
             default:
                 throw new \Exception("Endpoint não encontrado!", 404);
         }
     }
+    
     
     /**
      * Obtém um usuário pelo ID ou todos os usuários.
@@ -42,21 +41,6 @@ class UserService
                 $users = User::selectAllUser();
                 return ['status' => 'success', 'data' => $users];
             }
-        } catch (\Exception $e) {
-            return ['status' => 'error', 'message' => $e->getMessage()];
-        }
-    }
-
-    /**
-     * Registra um novo usuário.
-     * @return string Uma mensagem de sucesso.
-    */
-    public function registerNewUser()
-    {
-        try {
-            $data = $_POST;
-            $message = User::registerNewUser($data);
-            return ['status' => 'success', 'message' => $message];
         } catch (\Exception $e) {
             return ['status' => 'error', 'message' => $e->getMessage()];
         }
@@ -92,6 +76,64 @@ class UserService
         }
     }
 
+    public function registerUser()
+    {
+        try {
+            // Lê o JSON enviado
+            $json = file_get_contents('php://input');
+
+            // Converte o JSON em um array associativo
+            $queryParams = json_decode($json, true);
+
+            if ($queryParams === null) {
+                throw new \Exception("Erro ao decodificar os dados JSON.");
+            }
+
+            // Agora você pode acessar os campos como $queryParams['nome'], $queryParams['mae'], etc.
+
+            // Extrai os dados necessários dos $queryParams
+            $userData = [
+                'nome' => $queryParams['nome'],
+                'mae' => $queryParams['mae'],
+                'cpf' => $queryParams['cpf'],
+                'dataNascimento' => $queryParams['dataNascimento'],
+                'tel' => $queryParams['tel'],
+                'sexo' => $queryParams['sexo'],
+                'cep' => $queryParams['cep'],
+                'estado' => $queryParams['estado'],
+                'cidade' => $queryParams['cidade'],
+                'numeroEndereco' => $queryParams['numeroEndereco'],
+                'endereco' => $queryParams['endereco'],
+                'email' => $queryParams['email'],
+                'login' => $queryParams['login'],
+                'celular' => $queryParams['celular'],
+                'senha' => $queryParams['senha'],
+                'tipo_user' => $queryParams['tipo_user'],
+                // Adicione quaisquer outros campos necessários aqui
+            ];
+
+            // Adicione instruções de depuração para verificar os dados recebidos
+            error_log('Dados recebidos para registro de usuário:');
+            error_log(print_r($userData, true));
+
+            // Chama o método no modelo User.php para inserir o novo usuário no banco de dados
+            $message = User::insertUser($userData);
+
+            // Adicione instruções de depuração para verificar a mensagem de retorno
+            error_log('Mensagem de retorno do registro de usuário:');
+            error_log(print_r($message, true));
+
+            // Retorna a resposta em formato JSON
+            return json_encode(['status' => 'success', 'message' => $message]);
+        } catch (\Exception $e) {
+            // Em caso de exceção, também retorne a resposta em formato JSON
+            return json_encode(['status' => 'error', 'message' => $e->getMessage()]);
+        }
+    }
+
+
+
+
     /**
      * Faz login de um usuário.
      * @return string 'Sucesso' se o login for bem-sucedido, 'Erro' se o login falhar.
@@ -101,18 +143,16 @@ class UserService
         try {
             $data = $_POST;
             if (isset($data['login']) && isset($data['senha'])) {
-                $message = User::userLogin($data['login'], $data['senha']);
-
-                if ($message === 'Sucesso') {
-                    // Gere um token JWT
+                if (User::userAuthentication($data['login'], $data['senha'])) {
+                    // Gera um token JWT
                     $tokenPayload = [
-                        'user_id' => 123, // Substitua pelo ID do usuário autenticado
-                        'exp' => time() + 3600 // Define o tempo de expiração do token (1 hora)
+                        'user_id' => 123, 
+                        'exp' => time() + 10800 
                     ];
-                    $secretKey = 'no_sigilo'; // Substitua pelo seu segredo secreto
-
+                    $secretKey = 'no_sigilo'; 
+    
                     $token = JWT::encode($tokenPayload, $secretKey, 'HS256');
-
+    
                     // Construa a resposta com o token JWT
                     $response = [
                         'status' => 'success',
@@ -120,18 +160,18 @@ class UserService
                         'data' => [
                             'access_token' => $token,
                             'token_type' => 'Bearer',
-                            'expires_in' => 3600
+                            'expires_in' => 10800,
                         ]
                     ];
-
+    
                     http_response_code(200);
-                    return $response;
+                    return json_encode($response); // Retorna a resposta como JSON
                 } else {
                     http_response_code(401);
-                    return [
+                    return json_encode([
                         'status' => 'error',
                         'message' => 'Usuário ou senha incorretos'
-                    ];
+                    ]);
                 }
             } else {
                 http_response_code(400);
@@ -140,10 +180,10 @@ class UserService
         } catch (\Exception $e) {
             $statusCode = $e->getCode() ?: 400;
             http_response_code($statusCode);
-            return [
+            return json_encode([
                 'status' => 'error',
                 'message' => $e->getMessage()
-            ];
+            ]);
         }
     }
 }

@@ -45,24 +45,12 @@ document.addEventListener('DOMContentLoaded', function () {
     btnEtapa2.disabled = true;
     btnSubmitForm.disabled = true;
 
-    function applyMasksToFields() {
-        const maskOptions = [
-            { id: 'input_cpf', mask: '000.000.000-00' },
-            { id: 'input_tel', mask: '(00) 0000-0000' },
-            { id: 'input_cep', mask: '00000-000' },
-            { id: 'input_celular', mask: '(00) 00000-0000' }
-        ];
-    
-        maskOptions.forEach(option => {
-            const field = document.getElementById(option.id);
-            if (field) {
-                IMask(field, { mask: option.mask });
-            }
-        });
-    }
-    
     // Chame a função para aplicar as máscaras aos campos desejados
     applyMasksToFields();
+
+    // Aplicar a função aos campos inputNome e inputMae
+    inputNome.addEventListener('input', removeNumbers);
+    inputMae.addEventListener('input', removeNumbers);
 
     function setupValidation(fields, button) {
         fields.forEach(input => {
@@ -97,7 +85,6 @@ document.addEventListener('DOMContentLoaded', function () {
         button.disabled = !isFormValid;
     }
 
-
     function validateField(field) {
         const value = field.value.trim();
         const inputGroup = field.closest('.input-group'); // Encontra o elemento .input-group pai
@@ -126,13 +113,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 field.classList.remove("is-invalid");
             }
             if (field === inputNome || field === inputMae) {
-                if (value.length < 15 || value.length > 80) {
+                if (value.length < 15 || value.length > 80 || /\d/.test(value)) {
                     field.classList.add('is-invalid');
                     inputGroup.classList.add('is-invalid');
-        
+            
                     const errorMessage = document.createElement('div');
                     errorMessage.className = 'invalid-feedback';
-                    errorMessage.textContent = 'Este campo deve ter entre 15 e 80 caracteres.';
+                    errorMessage.textContent = 'Este campo deve ter entre 15 e 80 caracteres e não deve conter números.';
                     inputGroup.appendChild(errorMessage);
                 } else {
                     // Remove qualquer mensagem de erro existente
@@ -140,24 +127,37 @@ document.addEventListener('DOMContentLoaded', function () {
                     if (existingErrorMessage) {
                         existingErrorMessage.remove();
                     }
-        
+            
                     if (field.classList.contains("is-invalid")) {
                         field.classList.remove("is-invalid");
                     }
                 }
-            }
+            }                        
             else if (field === inputCpf) {
                 const cpfRegex = /^\d{3}\.\d{3}\.\d{3}-\d{2}$/;
                 if (!cpfRegex.test(value)) {
                     field.classList.add('is-invalid');
                     inputGroup.classList.add('is-invalid'); // Adiciona a classe à div
-
+    
                     // Adiciona a mensagem de erro à div
                     const errorMessage = document.createElement('div');
                     errorMessage.className = 'invalid-feedback';
                     errorMessage.textContent = 'CPF inválido.';
                     inputGroup.appendChild(errorMessage);
-                }
+                } else {
+                    // Verifique se o CPF é válido usando a função validarCPF
+                    const cpfValido = validarCPF(value);
+                    if (!cpfValido) {
+                        field.classList.add('is-invalid');
+                        inputGroup.classList.add('is-invalid'); // Adiciona a classe à div
+    
+                        // Adiciona a mensagem de erro à div
+                        const errorMessage = document.createElement('div');
+                        errorMessage.className = 'invalid-feedback';
+                        errorMessage.textContent = 'CPF inválido.';
+                        inputGroup.appendChild(errorMessage);
+                    }
+                }            
             } else if (field === inputTel) {
                 const telefoneRegex = /^\(\d{2}\) \d{4}-\d{4}$/;
                 if (!telefoneRegex.test(value)) {
@@ -283,17 +283,28 @@ document.addEventListener('DOMContentLoaded', function () {
                     inputGroup.appendChild(errorMessage);
                 }
              }
-            } else if (field === inputSenha) {
+            } if (field === inputSenha) {
                 const senhaRegex = /^[a-zA-Z]{8}$/;
                 if (!senhaRegex.test(value)) {
                     field.classList.add('is-invalid');
                     inputGroup.classList.add('is-invalid');
-    
+            
                     const errorMessage = document.createElement('div');
                     errorMessage.className = 'invalid-feedback';
                     errorMessage.textContent = 'A senha deve conter exatamente 8 caracteres alfabéticos.';
                     inputGroup.appendChild(errorMessage);
                 }
+            } else if (field === inputCSenha) {
+                const senha = inputSenha.value.trim();
+                if (value !== senha) {
+                    field.classList.add('is-invalid');
+                    inputGroup.classList.add('is-invalid');
+            
+                    const errorMessage = document.createElement('div');
+                    errorMessage.className = 'invalid-feedback';
+                    errorMessage.textContent = 'As senhas não coincidem.';
+                    inputGroup.appendChild(errorMessage);
+                }                                                   
             } else if (field === inputCep) {
                 const cepRegex = /^\d{5}-\d{3}$/;
                 if (!cepRegex.test(value)) {
@@ -379,69 +390,98 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
     
+    // Função para enviar a requisição AJAX
+    function sendRequest(userData) {
+
+        console.log(JSON.stringify(userData));
+
+        $.ajax({
+            url: 'http://localhost/FastSMS/API/public_html/api/user/registerUser',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(userData),
+            success: function (data) {
+                // Verificar a resposta da API
+                if (data.status === 'success') {                    
+                                                            
+                } else {
+
+                    console.log("Status: " + data.status);
+                    console.log("Erro: " + data.message); // Deve ser data.data.message
+                }
+            },
+            error: function (error) {
+                // Erro na requisição
+                console.error('Erro na requisição:', error);
+                alert('Erro na requisição. Tente novamente.');
+            }
+        });        
+    }
+
+    // Adicione um evento de clique ao botão
     btnSubmitForm.addEventListener('click', function () {
-        // Valide se todos os campos obrigatórios estão preenchidos
-        if (
-            inputNome.value && inputMae.value && inputCpf.value &&
-            inputDataNascimento.value && inputTel.value && selectSexo.value &&
-            inputCep.value && selectEstado.value && inputCidade.value &&
-            inputNumeroEndereco.value && textEndereco.value && inputEmail.value &&
-            inputLogin.value && inputCelular.value && inputSenha.value
-        ) {
-            // Salvar informações do Formulário 3 no objeto de usuário
-            usuario.email = inputEmail.value;
-            usuario.login = inputLogin.value;
-            usuario.celular = inputCelular.value;
-            usuario.senha = inputSenha.value;
-            usuario.tipo_user = 'User'; // Definindo 'User' como valor padrão para tipo_user
-        
-            // Formate os dados conforme necessário
-            let formattedData = {
-                nome: usuario.nome,
-                mae: usuario.mae,
-                cpf: usuario.cpf,
-                dataNascimento: usuario.dataNascimento,
-                tel: usuario.tel,
-                sexo: usuario.sexo,
-                cep: usuario.cep,
-                estado: usuario.estado,
-                cidade: usuario.cidade,
-                numeroEndereco: usuario.numeroEndereco,
-                endereco: usuario.endereco,
-                complemento: usuario.complemento,
-                email: usuario.email,
-                login: usuario.login,
-                celular: usuario.celular,
-                senha: usuario.senha,
-                tipo_user: usuario.tipo_user
+        // Array com os campos obrigatórios
+        const camposObrigatorios = [
+            inputNome, inputMae, inputCpf, inputDataNascimento, inputTel,
+            selectSexo, inputCep, selectEstado, inputCidade, inputNumeroEndereco,
+            textEndereco, inputEmail, inputLogin, inputCelular, inputSenha
+        ];
+
+        // Verifique se todos os campos obrigatórios estão preenchidos e não estão vazios
+        const camposPreenchidos = camposObrigatorios.every(function (campo) {
+            return campo.value.trim() !== '';
+        });
+
+        // Se todos os campos obrigatórios estiverem preenchidos
+        if (camposPreenchidos) {
+            // Coletar os valores dos campos
+            const nome = inputNome.value.trim();
+            const mae = inputMae.value.trim();
+            const cpf = inputCpf.value.trim();
+            const dataNascimento = inputDataNascimento.value.trim();
+            const tel = inputTel.value.trim();
+            const sexo = selectSexo.value.trim();
+            const cep = inputCep.value.trim();
+            const estado = selectEstado.value.trim();
+            const cidade = inputCidade.value.trim();
+            const numeroEndereco = inputNumeroEndereco.value.trim();
+            const endereco = textEndereco.value.trim();
+            const email = inputEmail.value.trim();
+            const login = inputLogin.value.trim();
+            const celular = inputCelular.value.trim();
+            const senha = inputSenha.value.trim();
+            const tipo_user = 'tipo_de_usuario'; // Substitua pelo valor correto
+
+            // Construir um objeto com os dados do usuário
+            const userData = {
+                nome,
+                mae,
+                cpf,
+                dataNascimento,
+                tel,
+                sexo,
+                cep,
+                estado,
+                cidade,
+                numeroEndereco,
+                endereco,
+                email,
+                login,
+                celular,
+                senha,
+                tipo_user
             };
-        
-            // Enviar objeto de usuário formatado via AJAX para o backend
-            enviarDadosParaBancoDeDados(formattedData);
+
+            console.log(userData);
+
+            // Chame a função sendRequest para enviar a requisição AJAX
+            sendRequest(userData);
         } else {
-            alert('Preencha todos os campos obrigatórios antes de enviar o formulário.');
+            // Campos obrigatórios não preenchidos
+            alert('Preencha todos os campos obrigatórios.');
         }
     });
-    
-    
-    function enviarDadosParaBancoDeDados(data) {
-        // Enviar o objeto de usuário formatado como JSON diretamente para a API
-        console.log(data)
-        $.ajax({
-            url: 'http://localhost/FastSMS/API/public_html/api/user/registerNewUser',
-            type: 'POST',
-            contentType: 'application/json', // Define o tipo de conteúdo como JSON
-            data: JSON.stringify(data), // Converte o objeto em JSON
-            success: function (response) {
-                alert('Resposta do servidor: ' + response.message);
-            },
-            error: function (xhr, status, error) {
-                console.log(xhr.responseText);
-                alert('Erro ao registrar usuário: ' + xhr.responseText);
-            }
-        });
-    }
-    
+
 
     function nextTab() {
         // Encontra a tab ativa atual e sua próxima tab
@@ -464,4 +504,71 @@ document.addEventListener('DOMContentLoaded', function () {
         var nextTabContent = document.querySelectorAll('.tab-content .tab-pane')[nextTabIndex];
         nextTabContent.classList.add('active', 'show');
     }
+
+    function validarCPF(cpf) {
+        cpf = cpf.replace(/[^\d]+/g, ''); // Remove caracteres não numéricos
+    
+        if (cpf.length !== 11) {
+            return false; // Um CPF válido deve ter 11 dígitos
+        }
+    
+        // Verifica se todos os dígitos são iguais, o que não é permitido
+        if (/^(\d)\1+$/.test(cpf)) {
+            return false;
+        }
+    
+        // Calcula o primeiro dígito verificador
+        let soma = 0;
+        for (let i = 0; i < 9; i++) {
+            soma += parseInt(cpf.charAt(i)) * (10 - i);
+        }
+        let resto = 11 - (soma % 11);
+        if (resto === 10 || resto === 11) {
+            resto = 0;
+        }
+        if (resto !== parseInt(cpf.charAt(9))) {
+            return false; // CPF inválido
+        }
+    
+        // Calcula o segundo dígito verificador
+        soma = 0;
+        for (let i = 0; i < 10; i++) {
+            soma += parseInt(cpf.charAt(i)) * (11 - i);
+        }
+        resto = 11 - (soma % 11);
+        if (resto === 10 || resto === 11) {
+            resto = 0;
+        }
+        if (resto !== parseInt(cpf.charAt(10))) {
+            return false; // CPF inválido
+        }
+    
+        return true; // CPF válido
+    }
+    
+    function applyMasksToFields() {
+        const maskOptions = [
+            { id: 'input_cpf', mask: '000.000.000-00' },
+            { id: 'input_tel', mask: '(00) 0000-0000' },
+            { id: 'input_cep', mask: '00000-000' },
+            { id: 'input_celular', mask: '(00) 00000-0000' }
+        ];
+    
+        maskOptions.forEach(option => {
+            const field = document.getElementById(option.id);
+            if (field) {
+                IMask(field, { mask: option.mask });
+            }
+        });
+    }
+
+    // Função para remover números de um campo de entrada de texto
+    function removeNumbers(event) {
+        const value = event.target.value;
+        if (/\d/.test(value)) {
+            event.target.value = value.replace(/\d/g, '');
+        }
+    }
+    
 });
+

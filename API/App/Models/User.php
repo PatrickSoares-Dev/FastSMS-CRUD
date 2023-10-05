@@ -4,7 +4,7 @@ namespace App\Models;
 
 class User
 {
-    private static $table = 'usuarios'; // Nome da nova tabela
+    private static $table = 'usuarios';
 
     /**
      * Seleciona um usuário com base no ID.
@@ -47,68 +47,7 @@ class User
             throw new \Exception("Nenhum usuário encontrado!");
         }
     }
-
-    public static function registerNewUser($data)
-    {
-        try {
-            $connPdo = new \PDO(DBDRIVE . ':host=' . DBHOST . ';dbname=' . DBNAME, DBUSER, DBPASS);
-
-            // Verifica se já existe um usuário com o mesmo login ou email
-            $checkUserQuery = 'SELECT * FROM ' . self::$table . ' WHERE login = :login OR email = :email';
-            $stmtCheckUser = $connPdo->prepare($checkUserQuery);
-            $stmtCheckUser->bindValue(':login', $data['login']);
-            $stmtCheckUser->bindValue(':email', $data['email']);
-            $stmtCheckUser->execute();
-
-            if ($stmtCheckUser->rowCount() > 0) {
-                // Retorna uma resposta de erro informando que já existe um usuário com os mesmos dados
-                http_response_code(409);
-                return [
-                    'status' => 'error',
-                    'message' => 'Já existe um usuário com o mesmo login ou email.'
-                ];
-            } else {
-                // Se não houver duplicatas, prossiga com a inserção do usuário
-                $insertUserQuery = 'INSERT INTO ' . self::$table . ' (nome, dataNascimento, sexo, mae, cpf, celular, tel, cep, endereco, numeroEndereco, complemento, cidade, estado, login, senha, tipo_user, email) VALUES (:nome, :dataNascimento, :sexo, :mae, :cpf, :celular, :tel, :cep, :endereco, :numeroEndereco, :complemento, :cidade, :estado, :login, :senha, :tipo_user, :email)';
-                $stmtInsertUser = $connPdo->prepare($insertUserQuery);
-                // Atribua os valores usando bindValue
-                $stmtInsertUser->bindValue(':nome', $data['nome']);
-                $stmtInsertUser->bindValue(':dataNascimento', $data['dataNascimento']);
-                $stmtInsertUser->bindValue(':sexo', $data['sexo']);
-                $stmtInsertUser->bindValue(':mae', $data['mae']);
-                $stmtInsertUser->bindValue(':cpf', $data['cpf']);
-                $stmtInsertUser->bindValue(':celular', $data['celular']);
-                $stmtInsertUser->bindValue(':tel', $data['tel']);
-                $stmtInsertUser->bindValue(':cep', $data['cep']);
-                $stmtInsertUser->bindValue(':numeroEndereco', $data['numeroEndereco']);
-                $stmtInsertUser->bindValue(':endereco', $data['endereco']);
-                $stmtInsertUser->bindValue(':complemento', $data['complemento']);        
-                $stmtInsertUser->bindValue(':cidade', $data['cidade']);
-                $stmtInsertUser->bindValue(':estado', $data['estado']);
-                $stmtInsertUser->bindValue(':login', $data['login']);
-                $stmtInsertUser->bindValue(':senha', $data['senha']);
-                $stmtInsertUser->bindValue(':tipo_user', 'User'); // Definindo 'User' como valor padrão para tipo_user
-                $stmtInsertUser->bindValue(':email', $data['email']);
-                $stmtInsertUser->execute();
-
-                if ($stmtInsertUser->rowCount() > 0) {
-                    return 'Usuário(a) inserido com sucesso!';
-                } else {
-                    throw new \Exception("Falha ao inserir usuário(a)!");
-                }
-            }
-        } catch (\Exception $e) {
-            // Retorna uma resposta de erro caso ocorra uma exceção
-            http_response_code(500);
-            return [
-                'status' => 'error',
-                'message' => $e->getMessage()
-            ];
-        }
-    }
-
-
-
+  
     /**
      * Atualiza um usuário existente pelo ID e dados fornecidos no corpo JSON.
      * @param array $requestData Os dados da solicitação JSON que contém o ID e os dados a serem atualizados.
@@ -204,5 +143,79 @@ class User
             return 'Erro'; // Login falhou
         }
     }
+
+    /**
+     * Insere um novo usuário no banco de dados.
+     * @param array $userData Os dados do novo usuário.
+     * @return string Uma mensagem de sucesso ou erro.
+     * @throws \Exception Se a inserção falhar.
+     */
+    public static function insertUser($userData)
+    {
+        try {
+            $connPdo = new \PDO(DBDRIVE . ': host=' . DBHOST . '; dbname=' . DBNAME, DBUSER, DBPASS);
+    
+            // Realize a validação e inserção dos dados no banco de dados aqui.
+    
+            $sql = 'INSERT INTO ' . self::$table . ' (nome, mae, cpf, dataNascimento, tel, sexo, cep, estado, cidade, numeroEndereco, endereco, email, login, celular, senha, tipo_user)
+                    VALUES (:nome, :mae, :cpf, :dataNascimento, :tel, :sexo, :cep, :estado, :cidade, :numeroEndereco, :endereco, :email, :login, :celular, :senha, :tipo_user)';
+    
+            $stmt = $connPdo->prepare($sql);
+    
+            // Bind dos valores dos campos a serem inseridos
+            $stmt->bindValue(':nome', $userData['nome']);
+            $stmt->bindValue(':mae', $userData['mae']);
+            $stmt->bindValue(':cpf', $userData['cpf']);
+            $stmt->bindValue(':dataNascimento', $userData['dataNascimento']);
+            $stmt->bindValue(':tel', $userData['tel']);
+            $stmt->bindValue(':sexo', $userData['sexo']);
+            $stmt->bindValue(':cep', $userData['cep']);
+            $stmt->bindValue(':estado', $userData['estado']);
+            $stmt->bindValue(':cidade', $userData['cidade']);
+            $stmt->bindValue(':numeroEndereco', $userData['numeroEndereco']);
+            $stmt->bindValue(':endereco', $userData['endereco']);
+            $stmt->bindValue(':email', $userData['email']);
+            $stmt->bindValue(':login', $userData['login']);
+            $stmt->bindValue(':celular', $userData['celular']);
+            $stmt->bindValue(':senha', $userData['senha']);
+            $stmt->bindValue(':tipo_user', $userData['tipo_user']);
+    
+            $stmt->execute();
+    
+            if ($stmt->rowCount() > 0) {
+                $message = "Operacao realizada com sucesso"; // Defina a mensagem de sucesso aqui
+                $response = array(
+                    "status" => "success",
+                    "message" => $message,
+                    "data" => null
+                );
+    
+                http_response_code(200); // Código HTTP 200 OK
+            } else {
+                $message = "Erro ao processar a solicitacao"; // Defina a mensagem de erro aqui
+                $response = array(
+                    "status" => "error",
+                    "message" => $message,
+                    "data" => "Falha ao registrar usuario"
+                );
+    
+                http_response_code(400); // Código HTTP 400 Bad Request
+            }
+    
+            return json_encode($response); // Retorne a resposta como JSON
+                  
+        } catch (\Exception $e) {
+            $message = $e->getMessage();
+            $response = array(
+                "status" => "error",
+                "message" => $message,
+                "data" => null
+            );
+    
+            http_response_code(500); // Código HTTP 500 Internal Server Error
+    
+            return json_encode($response); // Retorne a resposta como JSON
+        }
+    }    
 }
 ?>
