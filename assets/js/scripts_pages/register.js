@@ -45,15 +45,18 @@ document.addEventListener('DOMContentLoaded', function () {
     btnEtapa2.disabled = true;
     btnSubmitForm.disabled = true;
 
-    // Chame a função para aplicar as máscaras aos campos desejados
+    // Chame a função para aplicar as máscaras aos campos desejados.
     applyMasksToFields();
 
-    // Aplicar a função aos campos inputNome e inputMae
+    // Aplicar a função aos campos.
     inputNome.addEventListener('input', removeNumbers);
     inputMae.addEventListener('input', removeNumbers);
+    selectEstado.addEventListener('input', removeNumbers);
+    inputCidade.addEventListener('input', removeNumbers);
 
     function setupValidation(fields, button) {
         fields.forEach(input => {
+
             // Evento de Button
             input.addEventListener('input', () => validateFieldsAndToggleButton(fields, button));            
             input.addEventListener('keydown', () => validateFieldsAndToggleButton(fields, button));
@@ -161,7 +164,7 @@ document.addEventListener('DOMContentLoaded', function () {
             } else if (field === inputTel) {
                 const telefoneRegex = /^\(\d{2}\) \d{4}-\d{4}$/;
                 if (!telefoneRegex.test(value)) {
-                    field.classList.add('is-invalid');
+                    field.classList.add('is-invalid');""
                     inputGroup.classList.add('is-invalid');
             
                     const errorMessage = document.createElement('div');
@@ -450,7 +453,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const login = inputLogin.value.trim();
             const celular = inputCelular.value.trim();
             const senha = inputSenha.value.trim();
-            const tipo_user = 'tipo_de_usuario'; // Substitua pelo valor correto
+            const tipo_user = 'User'; // Substitua pelo valor correto
 
             // Construir um objeto com os dados do usuário
             const userData = {

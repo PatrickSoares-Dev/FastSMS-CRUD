@@ -520,8 +520,7 @@
 	</div>
 	</div>
 	
-
 	<script src="assets/js/scripts_pages/register.js"></script>
+	
 </body>
-
 </html>

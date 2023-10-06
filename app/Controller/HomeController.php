@@ -7,7 +7,7 @@ class HomeController
 
         try{
             
-            $loader = new \Twig\Loader\FilesystemLoader('app/Views/Registration/');
+            $loader = new \Twig\Loader\FilesystemLoader('app/Views/Authentication/');
             $twig = new \Twig\Environment($loader);
             $template = $twig->load('register.php');
 
@@ -20,5 +20,25 @@ class HomeController
         }catch (Exception $e){
             echo $e->getMessage();
         }
+    }
+    public function login()
+    {
+
+        ///render
+      
+    }
+
+    public function registro()
+    {
+
+        ///render
+      
+    }
+
+    public function dashboard()
+    {
+
+        ///render
+      
     }
 }

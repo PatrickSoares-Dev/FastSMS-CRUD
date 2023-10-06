@@ -23,6 +23,7 @@
     <link rel="stylesheet" href="assets/css/register.css">
 </head>
 <body>
+    
     {{area_dinamica}}
 
     <script src="assets/js/jquery-3.3.1.min.js"></script>
