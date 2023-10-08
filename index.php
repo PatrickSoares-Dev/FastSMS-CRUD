@@ -1,44 +1,62 @@
 <?php
-    // Inclua os arquivos necessários
-    require_once 'app/Core/Core.php';
-    require_once 'lib/database/Connection.php';
-    require_once 'app/Controller/HomeController.php';
-    require_once 'app/Controller/ErrorController.php';
-    require_once 'app/Model/UsersModel.php';
-    require_once 'vendor/autoload.php';
+    // Obtém a URL completa
+    $currentURL = $_SERVER['REQUEST_URI'];
 
-    $requestUri = $_SERVER['REQUEST_URI'];
-    http://localhost/FastSMS/?pagina=home
-    $requestUri = explode('?', $requestUri)[0]; 
+    // Remove a parte do domínio e o "fastSMS/"
+    $rota = str_replace('/fastSMS/', '', $currentURL);
 
-    $urlParts = explode('/', trim($requestUri, '/'));
+    // Verifique se a chave 'url' está definida em $_GET
+    if (isset($rota)) {
+        // Separe as partes da URL
+        $parts = explode("/", $rota);
 
-    $controllerName = 'HomeController';
-    $actionName = 'index';
-
-    if (!empty($urlParts[0])) {
-        $controllerName = ucfirst($urlParts[0] . 'Controller');
-        array_shift($urlParts);
+        // Se a URL for vazia, defina $currentPage como 'login'
+        if ($parts[0] == '') {
+            $currentPage = 'login';    
+            include "app/Views/{$currentPage}/{$currentPage}.php";
+            include "app/Layout/Layout.php";
+        } elseif (count($parts) > 0) {            
+            // Se houver algo na URL que não seja 'login', 'register' ou 'forgot', use o DashboardLayout.php
+            $currentPage = $parts[0];
+            if ($currentPage !== 'login' && $currentPage !== 'register' && $currentPage !== 'forgot') {
+                include "app/Layout/DashboardLayout.php";                
+            } else {
+                include "app/Views/{$currentPage}/{$currentPage}.php";
+                include "app/Layout/Layout.php"; // Renderize o Layout.php para login, register ou forgot
+            }
+        }
     }
 
+    // // Obtém a URL completa
+    // $currentURL = $_SERVER['REQUEST_URI'];
 
-    if (!empty($urlParts[0])) {
-        $actionName = $urlParts[0];
-        array_shift($urlParts); 
-    }
+    // // Remove a parte do domínio e o "fastSMS/"
+    // $rota = str_replace('/fastSMS/', '', $currentURL);
 
-    ob_start();
-
-    $core = new Core;
-    $_GET['acao'] = $actionName;
-    $core->start($_GET);
-
-    $saida = ob_get_contents();
-
-    ob_end_clean();
-
-    $template = file_get_contents('app/Template/Layout.php');
-    $tplPronto = str_replace('{{area_dinamica}}', $saida, $template);
-
-    echo $tplPronto;
+    // // Verifique se a chave 'url' está definida em $_GET
+    // if (isset($rota)) {
+    //     // Verifique se a URL começa com "dashboard/"
+        
+    //     if (strpos($rota, 'dashboard') === 0) {
+    
+    //         // Separe as partes da URL
+    //         $parts = explode("/", $rota);
+    //         // Se a URL for "/dashboard" ou "/dashboard/", defina $currentPage como 'Home'
+    //         if (count($parts) == 1) {        
+    //             $currentPage = 'dashboard';
+    //         } else if(count($parts) > 1){
+    //             $currentPage = ($parts[0].'/'.$parts[1]);                
+    //         }
+    //         include "app/Layout/DashboardLayout.php";
+    //     } else {
+            
+    //         $currentPage = 'login';
+    //         $currentPage = explode("/", $rota)[0];            
+    //         include "app/Views/{$currentPage}/{$currentPage}.php";
+    //         include "app/Layout/Layout.php";
+    //     }
+    
+    // } 
 ?>
+
+

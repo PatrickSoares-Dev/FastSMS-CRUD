@@ -3,6 +3,6 @@
     //Mysql
     const DBDRIVE = 'mysql';
     const DBHOST = 'localhost';
-    const DBNAME = 'project_backend';
+    const DBNAME = 'fastsms';
     const DBUSER = 'root';
     const DBPASS = '';

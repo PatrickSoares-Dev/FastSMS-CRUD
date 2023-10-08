@@ -5,9 +5,7 @@
     $class = '/user'; // Use "/user" para acessar o UserService
     $param = '';
 
-    $jsonInput = file_get_contents('php://input');
-    $data = json_decode($jsonInput, true);
-
+    $response = file_get_contents($url . $class . $param);
 
 
     //echo $response;

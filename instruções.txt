@@ -39,3 +39,14 @@ assim:
         "symfony/polyfill-ctype": "^1.22"
     }
 }
+
+XDEBUG:
+
+https://xdebug.org/wizard
+COLOCAR phpinfo(); Copia esse código e coloca no wizard e segue com as instruções que ele falar
+php --ini na pasta do XAMMP pelo CMD
+
+//como instalar
+ https://youtu.be/cDwaX7ze6Os?si=f_ihM-FLIPQd83p9
+// como debugar
+ https://youtu.be/86jaK8cGL-M?si=7xOg5pNgd6do6cjf

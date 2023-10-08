@@ -35,7 +35,7 @@
                     "url": "https://github.com/symfony/polyfill"
                 }
             },
-            "installation-source": "dist",
+            "installation-source": "source",
             "autoload": {
                 "files": [
                     "bootstrap.php"
@@ -120,7 +120,7 @@
                     "url": "https://github.com/symfony/polyfill"
                 }
             },
-            "installation-source": "dist",
+            "installation-source": "source",
             "autoload": {
                 "files": [
                     "bootstrap.php"
@@ -197,7 +197,7 @@
             },
             "time": "2023-08-28T11:09:02+00:00",
             "type": "library",
-            "installation-source": "dist",
+            "installation-source": "source",
             "autoload": {
                 "psr-4": {
                     "Twig\\": "src/"
