@@ -56,6 +56,7 @@ class User
      */
     public static function updateUserById($requestData)
     {
+
         if (!isset($requestData['id']) || !isset($requestData['data'])) {
             throw new \Exception("Dados incompletos na solicitação.");
         }
