@@ -393,24 +393,24 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
     
-    // Função para enviar a requisição AJAX
+    // Função para enviar a requisição AJAX com dados x-www-form-urlencoded
     function sendRequest(userData) {
-
-        console.log(JSON.stringify(userData));
+        // Construir uma string x-www-form-urlencoded a partir do objeto userData
+        const formData = $.param(userData);
 
         $.ajax({
-            url: 'http://localhost/FastSMS/API/public_html/api/user/registerUser',
+            url: 'http://localhost/GR-09%20-2023-2%20-%20BG%20-%20PATRICK%20OLIVEIRA/API/public_html/api/user/registerUser',
             type: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify(userData),
+            contentType: 'application/x-www-form-urlencoded', // Configurar o tipo de conteúdo
+            data: formData, // Usar os dados em formato x-www-form-urlencoded
             success: function (data) {
                 // Verificar a resposta da API
-                if (data.status === 'success') {                    
-                                                            
+                if (data.status === 'success') {
+                    alert('Usuário cadastrado com sucesso');
+                    console.log(data)
                 } else {
-
                     console.log("Status: " + data.status);
-                    console.log("Erro: " + data.message); // Deve ser data.data.message
+                    console.log("Erro: " + data.message);
                 }
             },
             error: function (error) {
@@ -418,15 +418,16 @@ document.addEventListener('DOMContentLoaded', function () {
                 console.error('Erro na requisição:', error);
                 alert('Erro na requisição. Tente novamente.');
             }
-        });        
+        });
     }
+
 
     // Adicione um evento de clique ao botão
     btnSubmitForm.addEventListener('click', function () {
         // Array com os campos obrigatórios
         const camposObrigatorios = [
             inputNome, inputMae, inputCpf, inputDataNascimento, inputTel,
-            selectSexo, inputCep, selectEstado, inputCidade, inputNumeroEndereco,
+            selectSexo, inputCep, selectEstado, inputCidade, inputNumeroEndereco,inputComplemento,
             textEndereco, inputEmail, inputLogin, inputCelular, inputSenha
         ];
 
@@ -449,6 +450,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const cidade = inputCidade.value.trim();
             const numeroEndereco = inputNumeroEndereco.value.trim();
             const endereco = textEndereco.value.trim();
+            const complemento = inputComplemento.value.trim();
             const email = inputEmail.value.trim();
             const login = inputLogin.value.trim();
             const celular = inputCelular.value.trim();
@@ -467,6 +469,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 estado,
                 cidade,
                 numeroEndereco,
+                complemento,
                 endereco,
                 email,
                 login,

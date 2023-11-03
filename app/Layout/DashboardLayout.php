@@ -124,8 +124,10 @@
                 <!-- Place this tag where you want the button to render. -->
                 
               <!-- User -->
+              <a href="login" class=""><button class="btn btn-primary d-grid w-100" type="submit">Deslogar</button></a>
                 <li class="nav-item navbar-dropdown dropdown-user dropdown">
-                  <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
+                
+                  <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">                  
                     <div class="avatar avatar-online">
                       <img src="assets\img\icons\1.png" alt class="w-px-40 h-auto rounded-circle" />
                     </div>

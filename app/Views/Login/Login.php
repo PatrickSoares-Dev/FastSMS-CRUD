@@ -17,7 +17,7 @@
                             <h4 class="mb-2">Bem-vindo ao Fast SMS</h4>
                             <p class="mb-4">Faça login na sua conta e comece as suas campanhas</p>
                             <!-- Seu formulário aqui -->
-                            <form id="formAuthentication" class="mb-3" onsubmit="return validateForm()">
+                            <form id="formAuthentication" class="mb-3">
                                 <div class="mb-3">
                                     <label for="email" class="form-label">Email ou Login</label>
                                     <input
@@ -55,7 +55,7 @@
                                     </div>
                                 </div>
                                 <div class="mb-3">
-                                    <button class="btn btn-primary d-grid w-100" type="submit">Login</button>
+                                    <button class="btn btn-primary d-grid w-100" type="button" id='btnLogin'>Login</button>
                                 </div>
                             </form>
                             <p class="text-center">

@@ -1,20 +1,8 @@
-function validateForm() {
-    var emailOrLogin = document.getElementById("email").value;
-    var password = document.getElementById("password").value;
+console.log("entroiu")
 
-    if (emailOrLogin.trim() === "") {
-        alert("Por favor, preencha o campo de Email ou Login.");
-        return false; // Impede o envio do formulário
-    }
 
-    if (password.trim() === "") {
-        alert("Por favor, preencha o campo de Senha.");
-        return false; // Impede o envio do formulário
-    }
+let btn =document.querySelector("#btnLogin")
 
-    // Redireciona para o painel de controle (dashboard)
+btn.addEventListener("click", function() {
     window.location.href = "dashboard";
-
-    // Retorna false para evitar o envio do formulário
-    return false;
-}
+});

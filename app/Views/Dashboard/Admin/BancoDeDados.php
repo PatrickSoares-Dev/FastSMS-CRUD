@@ -25,7 +25,7 @@
                             aria-controls="navs-pills-top-home"
                             aria-selected="true"
                         >
-                            Modelo DB
+                            Modelo EER
                         </button>
                     </li>
                     <li class="nav-item">
@@ -47,7 +47,7 @@
                     <div class="tab-pane fade show active" id="navs-pills-top-home" role="tabpanel">
                         <div class="row">
                             <div class="col-12">
-                                <img src="assets\img\TabelaUser.png" class="img-fluid">
+                                <img src="assets\img\DER.png" class="img-fluid">
                             </div>
                         </div>
                     </div>
