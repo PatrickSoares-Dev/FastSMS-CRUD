@@ -19,8 +19,10 @@ class UserService
                 return $this->registerUser($_POST);
             case 'deleteUserById':
                 return $this->deleteUserById($queryParams);
-            case 'userLogin':
-                return $this->userLogin(); // Corrigir aqui para passar $queryParams
+            case 'userLogin': 
+                    return $this->userLogin();              
+            case 'twofa': 
+                return $this->twofaAuth($_POST); 
             default:
                 throw new \Exception("Endpoint não encontrado!", 404);
         }
@@ -54,8 +56,12 @@ class UserService
             $requiredFields = [
                 'nome', 'mae', 'cpf', 'dataNascimento', 'tel', 'sexo',
                 'cep', 'estado', 'cidade', 'numeroEndereco', 'endereco',
-                'complemento', 'email', 'celular', 'senha', 'tipo_user', 'login'
+                'complemento', 'email', 'celular', 'senha', 'login'
             ];
+            
+            // Adicione 'tipo_user' com o valor padrão 'User' aos dados
+            $requestData['tipo_user'] = 'User';
+
             foreach ($requiredFields as $field) {
                 if (!isset($requestData[$field])) {
                     throw new \Exception("O campo '$field' é obrigatório.");
@@ -99,6 +105,7 @@ class UserService
     }
 
 
+
     /**
      * Atualiza um usuário pelo ID.     
      * @param int $id O ID do usuário a ser atualizado.
@@ -133,36 +140,38 @@ class UserService
      * Faz login de um usuário.
      * @return string 'Sucesso' se o login for bem-sucedido, 'Erro' se o login falhar.
     */
-    public static function userLogin()
+    public function userLogin()
     {
         try {
-            $data = $_POST;
-            if (isset($data['login']) && isset($data['senha'])) {
-                $message = User::userLogin($data['login'], $data['senha']);
+            if (isset($_POST['login']) && isset($_POST['senha'])) {
+                $loginOrEmail = $_POST['login'];
+                $senha = $_POST['senha'];
 
-                if ($message === 'Sucesso') {
-                    // Gere um token JWT
-                    $tokenPayload = [
-                        'user_id' => 123, // Substitua pelo ID do usuário autenticado
-                        'exp' => time() + 3600 // Define o tempo de expiração do token (1 hora)
-                    ];
-                    $secretKey = 'no_sigilo'; // Substitua pelo seu segredo secreto
+                // Verifica se o loginOrEmail parece ser um email
+                $field = filter_var($loginOrEmail, FILTER_VALIDATE_EMAIL) ? 'email' : 'login';
 
-                    $token = JWT::encode($tokenPayload, $secretKey, 'HS256');
+                $userStatus = User::userLogin($loginOrEmail, $senha);
 
-                    // Construa a resposta com o token JWT
-                    $response = [
-                        'status' => 'success',
-                        'message' => 'Autenticação bem-sucedida',
-                        'data' => [
-                            'access_token' => $token,
-                            'token_type' => 'Bearer',
-                            'expires_in' => 3600
-                        ]
-                    ];
+                if ($userStatus === 'Sucesso') {
+                    // Consulta o banco de dados para obter os detalhes do usuário
+                    $authenticatedUser = User::selectUserByField($field, $loginOrEmail);
 
-                    http_response_code(200);
-                    return $response;
+                    if ($authenticatedUser) {
+                        http_response_code(200);
+
+                        // Retorna um array com as informações, incluindo o ID do usuário
+                        return [
+                            'status' => 'success',
+                            'message' => 'Autenticação bem sucedida.',
+                            'user_id' => $authenticatedUser['id'] // ID do usuário autenticado
+                        ];
+                    } else {
+                        http_response_code(401);
+                        return [
+                            'status' => 'error',
+                            'message' => 'Usuário não encontrado'
+                        ];
+                    }
                 } else {
                     http_response_code(401);
                     return [
@@ -175,6 +184,92 @@ class UserService
                 throw new \Exception("Login e senha não fornecidos.", 400);
             }
         } catch (\Exception $e) {
+            $statusCode = $e->getCode() ?: 400;
+            http_response_code($statusCode);
+            return [
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ];
+        }
+    }
+
+    public function twofaAuth($requestData)
+    {
+        try {
+            error_log("Início da autenticação de dois fatores"); // Mensagem de log
+
+            $id_user = $requestData['id'];
+            $currentQuestion = $requestData['question'];
+            $answer = $requestData['answer'];
+
+            // Recupere o usuário pelo ID
+            $user = $this->getUser(['id' => $id_user]);
+
+            if ($user['status'] === 'error') {
+                error_log("Usuário nao encontrado!"); // Mensagem de log
+                throw new \Exception("Usuario nao encontrado!");
+            }
+
+            $userDetails = $user['data'];
+            $correctAnswers = 0;
+
+            // Antes da verificação das respostas
+            error_log("currentQuestion: $currentQuestion");
+            error_log("answer: $answer");
+            error_log("userDetails['mae']: " . $userDetails['mae']);
+            error_log("userDetails['dataNascimento']: " . $userDetails['dataNascimento']);
+            error_log("userDetails['cep']: " . $userDetails['cep']);
+
+            // Verifique a pergunta atual
+            if ($currentQuestion === 'twofa_mae' && $userDetails['mae'] === $answer) {
+                error_log($answer . $userDetails['mae']);
+                $correctAnswers++;
+            } elseif ($currentQuestion === 'twofa_data' && $userDetails['dataNascimento'] === $answer) {
+                $correctAnswers++;
+            } elseif ($currentQuestion === 'twofa_cep' && $userDetails['cep'] === $answer) {
+                $correctAnswers++;
+            }
+
+            if ($correctAnswers === 1) {
+                // Usuário autenticado com sucesso
+                error_log("Usuário autenticado com sucesso"); // Mensagem de log
+
+                // Crie a sessão e um token de acesso
+                $tokenPayload = [
+                    'user_id' => $id_user,
+                    'exp' => time() + 3600 // Define o tempo de expiração do token (1 hora)
+                ];
+                $secretKey = 'seu_segredo_secreto'; // Substitua pelo seu segredo secreto
+
+                $token = JWT::encode($tokenPayload, $secretKey, 'HS256');
+
+                // Construa a resposta com o token JWT e informações do usuário
+                $response = [
+                    'status' => 'success',
+                    'message' => 'Autenticação bem-sucedida',
+                    'data' => [
+                        'access_token' => $token,
+                        'token_type' => 'Bearer',
+                        'expires_in' => 3600,
+                        'user_id' => $id_user,
+                        'tipo_user' => $userDetails['tipo_user']
+                    ]
+                ];
+
+                http_response_code(200);
+                return $response;
+            } else {
+                // Perguntas de autenticação incorretas
+                error_log("Respostas incorretas nas perguntas de autenticação"); // Mensagem de log
+
+                http_response_code(401);
+                return [
+                    'status' => 'error',
+                    'message' => 'Respostas incorretas nas perguntas de autenticação.'
+                ];
+            }
+        } catch (\Exception $e) {
+            error_log("Erro: " . $e->getMessage()); // Mensagem de log
             $statusCode = $e->getCode() ?: 400;
             http_response_code($statusCode);
             return [

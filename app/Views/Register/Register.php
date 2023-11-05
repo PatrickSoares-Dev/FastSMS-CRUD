@@ -520,7 +520,39 @@
 	</div>
 	</div>
 
-	<script src="assets/js/scripts_pages/register.js"></script>
+	<div class="bs-toast toast toast-placement-ex m-2" role="alert" aria-live="assertive" aria-atomic="true" data-delay="2000">
+		<div class="toast-header">
+			<i class="bx bx-bell me-2"></i>
+			<div class="me-auto fw-semibold">Toast</div>
+			<small>1 min atrás</small>
+			<button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+		</div>
+		<div class="toast-body"></div>
+	</div>
+		
+	<!-- TOAST ERROR -->
+	<div id="toast-error" class="toast bg-danger" role="alert" aria-live="assertive" aria-atomic="true">
+		<div class="toast-header">
+			<i class="bx bx-bell me-2"></i>
+			<div class="me-auto fw-semibold">Error</div>
+			<small>1 min atrás</small>
+			<button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+		</div>
+		<div class="toast-body"></div>
+	</div>
+		
+	<!-- TOAST SUCESS -->
+	<div id="toast-success" class="toast bg-success" role="alert" aria-live="assertive" aria-atomic="true">
+		<div class="toast-header">
+			<i class="bx bx-bell me-2"></i>
+			<div class="me-auto fw-semibold">Sucesso</div>
+			<small>1 min atrás</small>
+			<button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+		</div>
+		<div class="toast-body"></div>
+	</div>
+	
+	<script src="assets/js/scripts_pages/Register/register.js"></script>
 </body>
 
 </html>

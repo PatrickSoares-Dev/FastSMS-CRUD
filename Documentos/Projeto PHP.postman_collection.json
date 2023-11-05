@@ -31,6 +31,49 @@
 			"response": []
 		},
 		{
+			"name": "/twofa",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "id",
+							"value": "9",
+							"type": "text"
+						},
+						{
+							"key": "question",
+							"value": "twofa_mae",
+							"type": "text"
+						},
+						{
+							"key": "answer",
+							"value": "Luzia Soares do Couto",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost/GR-09%20-2023-2%20-%20BG%20-%20PATRICK%20OLIVEIRA/API/public_html/api/user/twofa",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"GR-09%20-2023-2%20-%20BG%20-%20PATRICK%20OLIVEIRA",
+						"API",
+						"public_html",
+						"api",
+						"user",
+						"twofa"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "/updateUserById NF",
 			"request": {
 				"method": "POST",

@@ -11,9 +11,12 @@
         rel="stylesheet" />
 
     <!-- CSS -->
-    <link rel="stylesheet" href="assets/vendor/fonts/boxicons.css" />
+    
     <link rel="stylesheet" href="assets/vendor/fonts/boxicons.css" />
     <link rel="stylesheet" href="assets/vendor/css/core.css" class="template-customizer-core-css" />
+    <link rel="stylesheet" href="assets/vendor/libs/bootstrap/bootstrap.min.css" class="" />
+    <link rel="stylesheet" href="assets/vendor/libs/bootstrap/bootstrap-grid.css" class="" />
+    <link rel="stylesheet" href="assets/vendor/libs/bootstrap/bootstrap.css" class="" />
     <link rel="stylesheet" href="assets/vendor/css/theme-default.css" class="template-customizer-theme-css" />
     <link rel="stylesheet" href="assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
     <link rel="stylesheet" href="assets/css/demo.css" />
@@ -236,9 +239,9 @@
 
   <script src="assets/js/jquery-3.3.1.min.js"></script>
 	<script src="assets/js/jquery.form-validator.min.js"></script>
-	<script src="assets/js/main.js"></script>
 	<script src="assets/vendor/libs/jquery/jquery.js"></script>
 	<script src="assets/vendor/libs/popper/popper.js"></script>
+  <script src="assets/vendor/js/bootstrap.min.js"></script>
 	<script src="assets/vendor/js/bootstrap.js"></script>
 	<script src="assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/imask/6.0.5/imask.min.js"></script>	

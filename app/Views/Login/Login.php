@@ -17,6 +17,11 @@
                             <h4 class="mb-2">Bem-vindo ao Fast SMS</h4>
                             <p class="mb-4">Faça login na sua conta e comece as suas campanhas</p>
                             <!-- Seu formulário aqui -->
+
+                            <div id="error-message" class="alert alert-danger" style="display: none; text-align: center;"></div>
+                            <div id="confirm-message" class="alert alert-primary" style="display: none; text-align: center;"></div>
+                            <div id="success-message" class="alert alert-success" style="display: none; text-align: center;"></div>
+
                             <form id="formAuthentication" class="mb-3">
                                 <div class="mb-3">
                                     <label for="email" class="form-label">Email ou Login</label>
@@ -27,6 +32,7 @@
                                         name="email-username"
                                         placeholder="Insira seu Email ou Login"
                                         autofocus
+                                        autocomplete="off"
                                     />
                                 </div>
                                 <div class="mb-3 form-password-toggle">
@@ -44,6 +50,7 @@
                                     name="password"
                                     placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
                                     aria-describedby="password"
+                                    autocomplete="off"
                                     />
                                     <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
                                 </div>
@@ -57,6 +64,7 @@
                                 <div class="mb-3">
                                     <button class="btn btn-primary d-grid w-100" type="button" id='btnLogin'>Login</button>
                                 </div>
+
                             </form>
                             <p class="text-center">
                                 <span>Novo na plataforma?</span>
@@ -66,14 +74,43 @@
                             </p>
                         </div>
                     </div>
-                    <!-- /Register -->
+                    <!-- /Login -->
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="basicModal" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                              <div class="modal-header">                              
+                                <h5 class="modal-title" id="exampleModalLabel1">Pergunta de segurança</h5>
+                                <button
+                                  type="button"
+                                  class="btn-close"
+                                  data-bs-dismiss="modal"
+                                  aria-label="Close"
+                                ></button>
+                              </div>
+                              <div class="modal-body">
+                              <div id="error-messageModal" class="alert alert-danger" style="display: none; text-align: center;"></div>
+                                <div class="row">
+                                  <div class="col mb-3">
+                                    <label for="nameBasic" class="form-label"></label>
+                                    <input type="text" id="nameBasic" class="form-control" placeholder="Enter Name" />
+                                  </div>
+                                </div>
+                                <div id="divButton" style="display: flex;justify-content: flex-end;">
+                                    <button type="button" class="btn btn-primary" id="btntwofa">Confirmar</button>
+                                </div>                          
+                                
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<script src="assets/js/scripts_pages/login.js"></script>
+<script src="assets/js/scripts_pages/Login/login.js"></script>
 
 </body>
 </html>

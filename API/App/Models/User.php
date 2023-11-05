@@ -135,7 +135,6 @@ class User
         }
     }
 
-
     
     /**
      * Exclui um usuário pelo ID.
