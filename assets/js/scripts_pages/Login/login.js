@@ -40,7 +40,7 @@ function sendRequest(userData) {
     const formData = $.param(userData);
 
     $.ajax({
-        url: 'http://localhost/GR-09%20-2023-2%20-%20BG%20-%20PATRICK%20OLIVEIRA/API/public_html/api/user/userLogin',
+        url: 'http://localhost/GR-09-2023-2-BG-PATRICK-OLIVEIRA/API/public_html/api/user/userLogin',
         type: 'POST',
         contentType: 'application/x-www-form-urlencoded',
         data: formData,
@@ -131,7 +131,7 @@ function send2FARequest(userData) {
     const formData = $.param(userData);
 
     $.ajax({
-        url: 'http://localhost/GR-09%20-2023-2%20-%20BG%20-%20PATRICK%20OLIVEIRA/API/public_html/api/user/twofa',
+        url: 'http://localhost/GR-09-2023-2-BG-PATRICK-OLIVEIRA/API/public_html/api/user/twofa',
         type: 'POST',
         contentType: 'application/x-www-form-urlencoded',
         data: formData,
@@ -141,7 +141,8 @@ function send2FARequest(userData) {
                 confirmMessage.style.display = 'none';
                 errorMessage.style.display = 'none';
                 successMessage.style.display = 'block';
-                $('#basicModal').modal('hide');
+                $('#basicModal').modal('hide');                        
+                
             } else {
                 // Mostrar mensagem de erro no modal
                 const errorMessageModal = document.querySelector("#error-messageModal");
@@ -159,6 +160,15 @@ function send2FARequest(userData) {
             console.error(error);
         }
     });
+
+    if(successMessage.textContent = "Autenticação bem-sucedida. Redirecionando..."){
+        setTimeout(function() {
+            // Redirecionar para a página /dashboard
+            window.location.href = 'http://localhost/GR-09-2023-2-BG-PATRICK-OLIVEIRA/dashboard';
+        }, 2000);
+    }
+
+
 }
 
 

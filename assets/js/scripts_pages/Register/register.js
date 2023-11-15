@@ -398,7 +398,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const formData = $.param(userData);
     
         $.ajax({
-            url: 'http://localhost/GR-09%20-2023-2%20-%20BG%20-%20PATRICK%20OLIVEIRA/API/public_html/api/user/registerUser',
+            url: 'http://localhost/GR-09-2023-2-BG-PATRICK-OLIVEIRA/API/public_html/api/user/registerUser',
             type: 'POST',
             contentType: 'application/x-www-form-urlencoded',
             data: formData,
@@ -408,7 +408,7 @@ document.addEventListener('DOMContentLoaded', function () {
     
                     // Redirect to the login page after 5 seconds
                     setTimeout(function () {
-                        window.location.href = 'http://localhost/GR-09%20-2023-2%20-%20BG%20-%20PATRICK%20OLIVEIRA/login'; // Replace with the actual URL of your login page
+                        window.location.href = 'http://localhost/GR-09-2023-2-BG-PATRICK-OLIVEIRA/login'; // Replace with the actual URL of your login page
                     }, 5000);
                 } else {
                     showToast("toast-error", data.data.message);

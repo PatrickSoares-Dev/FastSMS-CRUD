@@ -20,7 +20,7 @@
                             <div class="d-flex align-items-end row">
                                 <div class="col-sm-7">
                                     <div class="card-body">
-                                        <h5 class="card-title text-primary">Parabéns {Nome} 🎉</h5>
+                                        <h5 class="card-title text-primary">Parabéns <?php echo $_SESSION['user_name']; ?> 🎉</h5>
                                         <p class="mb-4">
                                             Você alcançou <span class="fw-bold">{porcentagem_sim}</span> de alcance em suas campanhas de SMS.
                                         </p>

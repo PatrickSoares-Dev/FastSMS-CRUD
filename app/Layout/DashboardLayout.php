@@ -1,3 +1,19 @@
+<?php
+
+if (!isset($_SESSION)) {
+    session_start();
+}
+
+require_once 'API\App\Services\AuthService.php';
+
+$authService = new \App\Services\AuthService();
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['logoutBtn'])) {
+  $authService->logout();
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -45,31 +61,33 @@
               </a>
             </li>
 
-            <!-- Layouts -->
-            <li class="menu-item">
-              <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon tf-icons bx bx-user"></i>
-                <div data-i18n="Layouts">Admin</div>
-              </a>
+            <!-- Admin Menu -->
+            <?php if ($_SESSION['tipo_user'] === 'admin'): ?>
+                <li class="menu-item">
+                    <a href="javascript:void(0);" class="menu-link menu-toggle">
+                        <i class="menu-icon tf-icons bx bx-user"></i>
+                        <div data-i18n="Layouts">Admin</div>
+                    </a>
 
-              <ul class="menu-sub">
-                <li class="menu-item">
-                  <a href="users" class="menu-link">
-                    <div data-i18n="Without menu">Usuários</div>
-                  </a>
-                </li>  
-                <li class="menu-item">
-                  <a href="logs" class="menu-link">
-                    <div data-i18n="Without menu">Logs</div>
-                  </a>
-                </li>    
-                <li class="menu-item">
-                  <a href="bd" class="menu-link">
-                    <div data-i18n="Without menu">Banco de dados</div>
-                  </a>
-                </li>            
-              </ul>          
-            </li>
+                    <ul class="menu-sub">
+                        <li class="menu-item">
+                            <a href="users" class="menu-link">
+                                <div data-i18n="Without menu">Usuários</div>
+                            </a>
+                        </li>
+                        <li class="menu-item">
+                            <a href="logs" class="menu-link">
+                                <div data-i18n="Without menu">Logs</div>
+                            </a>
+                        </li>
+                        <li class="menu-item">
+                            <a href="bd" class="menu-link">
+                                <div data-i18n="Without menu">Banco de dados</div>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+              <?php endif; ?>
 
             <li class="menu-header small text-uppercase">
             <span class="menu-header-text">Serviços</span>
@@ -127,7 +145,9 @@
                 <!-- Place this tag where you want the button to render. -->
                 
               <!-- User -->
-              <a href="login" class=""><button class="btn btn-primary d-grid w-100" type="submit">Deslogar</button></a>
+              <form action="" method="post">
+                  <button type="submit" name="logoutBtn" class="btn btn-primary d-grid w-100">Deslogar</button>
+              </form>
                 <li class="nav-item navbar-dropdown dropdown-user dropdown">
                 
                   <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">                  
@@ -145,7 +165,7 @@
                             </div>
                           </div>
                           <div class="flex-grow-1">
-                            <span class="fw-semibold d-block">Patrick Oliveira</span>
+                            <span class="fw-semibold d-block"><?php echo $_SESSION['user_name']; ?></span>
                             <small class="text-muted">User</small>
                           </div>
                         </div>
@@ -194,29 +214,35 @@
           <!-- Content wrapper -->
           <div class="content-wrapper">
             <div class="container-xxl flex-grow-1 container-p-y">
+            <?php
+              ob_start(); // Inicia o buffer de saída
 
-              <?php
-                if ($currentPage === 'dashboard') {
-                    require_once "app/Views/Dashboard/Dashboard.php";        
-                } else if ($currentPage === 'users') {
-                    require_once "app\Views\Dashboard\Admin\User.php";
-                    
-                }else if ($currentPage === 'logs') {
-                  require_once "app\Views\Dashboard\Admin\Logs.php";
-                  
-                }else if ($currentPage === 'bd') {
-                  require_once "app\Views\Dashboard\Admin\BancoDeDados.php";
-                  
-                }else if ($currentPage === 'campanha') {
-                  require_once "app\Views\Dashboard\Campanha\CampanhaSMS.php";
-                  
-                }else if ($currentPage === 'history') {
-                  require_once "app\Views\Dashboard\Campanha\HistoricoCampanha.php";
-                  
+              if ($resultadoVerificacaoUsuario['status'] === 'success') {
+                  // Renderize a página apenas se o usuário tiver permissão
+                  if ($currentPage === 'dashboard') {
+                      require_once "app/Views/Dashboard/Dashboard.php";        
+                  } else if ($currentPage === 'users') {
+                      require_once "app\Views\Dashboard\Admin\User.php";
+                  } else if ($currentPage === 'logs') {
+                      require_once "app\Views\Dashboard\Admin\Logs.php";
+                  } else if ($currentPage === 'bd') {
+                      require_once "app\Views\Dashboard\Admin\BancoDeDados.php";
+                  } else if ($currentPage === 'campanha') {
+                      require_once "app\Views\Dashboard\Campanha\CampanhaSMS.php";
+                  } else if ($currentPage === 'history') {
+                      require_once "app\Views\Dashboard\Campanha\HistoricoCampanha.php";
+                  } else {
+                      // Página de erro
+                      require_once "app/Views/Shared/Error.php";
+                      require_once "app/Layout/Layout.php";
+                  }    
               } else {
-                    require_once "app\Views\Shared\Error.php";
-                }
-              ?>
+                  // Se houver um erro na verificação do usuário, inclua a página de erro diretamente
+                  header("Location: http://localhost/GR-09-2023-2-BG-PATRICK-OLIVEIRA/error");
+              }
+
+              ob_end_flush(); // Libera o conteúdo do buffer de saída
+            ?>
 
             </div>            
           </div>
@@ -232,7 +258,7 @@
   <script>
       $(document).ready(function(){
         $('.menu-toggle').click(function(){
-          $(this).next('.menu-sub').slideToggle();
+            $(this).next('.menu-sub').slideToggle();
         });
       });
     </script>

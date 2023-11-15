@@ -6,7 +6,7 @@
     <title>Login</title>
 </head>
 <body>
-<div class="container-sm mt-5"> <!-- Adicione uma margem superior (mt-5) para centralizar verticalmente -->
+<div class="container-xl mt-5"> <!-- Adicione uma margem superior (mt-5) para centralizar verticalmente -->
     <div class="row justify-content-center"> <!-- Centralize horizontalmente -->
         <div class="col-md-6"> <!-- Defina o tamanho do container, por exemplo, col-md-6 -->
             <div class="authentication-wrapper authentication-basic container-p-y">

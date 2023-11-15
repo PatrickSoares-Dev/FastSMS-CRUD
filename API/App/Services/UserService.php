@@ -191,7 +191,7 @@ class UserService
                 'message' => $e->getMessage()
             ];
         }
-    }
+    }    
 
     public function twofaAuth($requestData)
     {
@@ -243,6 +243,17 @@ class UserService
 
                 $token = JWT::encode($tokenPayload, $secretKey, 'HS256');
 
+                // Inicie a sessão
+                session_start();
+
+                // Armazene informações do usuário na sessão
+                $_SESSION['user_id'] = $id_user;
+                $_SESSION['tipo_user'] = $userDetails['tipo_user'];
+                $_SESSION['user_name'] = $userDetails['login'];
+                $_SESSION['token'] = $token;
+                $_SESSION['exp'] = $tokenPayload['exp'];
+                
+
                 // Construa a resposta com o token JWT e informações do usuário
                 $response = [
                     'status' => 'success',
@@ -257,6 +268,8 @@ class UserService
                 ];
 
                 http_response_code(200);
+               
+
                 return $response;
             } else {
                 // Perguntas de autenticação incorretas
@@ -277,6 +290,7 @@ class UserService
                 'message' => $e->getMessage()
             ];
         }
-    }
+    }  
+
 }
 ?>

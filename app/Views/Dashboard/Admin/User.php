@@ -111,4 +111,6 @@
     <!-- / Layout wrapper -->
   </body>
 
+  <script src="assets\js\scripts_pages\Admin\users.js"></script>
+
 </html>
