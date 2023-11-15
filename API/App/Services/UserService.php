@@ -2,13 +2,21 @@
 namespace App\Services;
 
 use App\Models\User;
+use App\Services\AuthService;
 use Firebase\JWT\JWT;
 
 class UserService
 {   
+    private $authService;
+
+    public function __construct()
+    {
+        $this->authService = new AuthService();
+    }
+
     public function processRequest($url, $queryParams)
     {
-        $endpoint = array_shift($url);
+        $endpoint = array_shift($url);        
 
         switch ($endpoint) {
             case 'getUser':
@@ -20,7 +28,7 @@ class UserService
             case 'deleteUserById':
                 return $this->deleteUserById($queryParams);
             case 'userLogin': 
-                    return $this->userLogin();              
+                return $this->userLogin();              
             case 'twofa': 
                 return $this->twofaAuth($_POST); 
             default:
@@ -104,22 +112,37 @@ class UserService
         }
     }
 
-
-
-    /**
-     * Atualiza um usuário pelo ID.     
-     * @param int $id O ID do usuário a ser atualizado.
-     * @return string Uma mensagem de sucesso.
-    */
     public function updateUserById($requestData)
     {
         try {
-            $message = User::updateUserById($requestData);
-            return ['status' => 'success', 'message' => $message];
+            if (isset($requestData['id'])) {
+                $id = $requestData['id'];
+                $user = User::selectUser($id);
+    
+                if (!$user) {
+                    throw new \Exception("Usuário com ID $id não encontrado.", 404);
+                }
+    
+                // Atualize o usuário com base nos dados fornecidos
+                $user = array_merge($user, $requestData);
+    
+                // Remove o campo "url" para evitar problemas
+                if (isset($user['url'])) {
+                    unset($user['url']);
+                }
+    
+                // Atualize o usuário no banco de dados
+                $message = User::updateUser($id, $user);
+    
+                return ['status' => 'success', 'message' => $message];
+            } else {
+                throw new \Exception("ID do usuário não fornecido na solicitação.", 400);
+            }
         } catch (\Exception $e) {
             return ['status' => 'error', 'message' => $e->getMessage()];
         }
     }
+    
 
     public function deleteUserById($queryParams)
     {
@@ -155,16 +178,12 @@ class UserService
                 if ($userStatus === 'Sucesso') {
                     // Consulta o banco de dados para obter os detalhes do usuário
                     $authenticatedUser = User::selectUserByField($field, $loginOrEmail);
-
+    
                     if ($authenticatedUser) {
                         http_response_code(200);
-
-                        // Retorna um array com as informações, incluindo o ID do usuário
-                        return [
-                            'status' => 'success',
-                            'message' => 'Autenticação bem sucedida.',
-                            'user_id' => $authenticatedUser['id'] // ID do usuário autenticado
-                        ];
+    
+                        // Autentica o usuário e retorna a resposta
+                        return $this->authService->authenticateUser($authenticatedUser);
                     } else {
                         http_response_code(401);
                         return [

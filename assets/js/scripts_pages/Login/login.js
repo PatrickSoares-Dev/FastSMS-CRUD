@@ -148,11 +148,6 @@ function send2FARequest(userData) {
                 const errorMessageModal = document.querySelector("#error-messageModal");
                 errorMessageModal.textContent = "Respostas incorretas nas perguntas de autenticação";
                 errorMessageModal.style.display = 'block';
-
-                // Atualizar o modal com uma nova pergunta aleatória
-                const randomQuestion = getRandomQuestion();
-                labelElement.textContent = randomQuestion.label;
-                inputElement.placeholder = randomQuestion.placeholder;
             }
         },
         error: function (error) {
