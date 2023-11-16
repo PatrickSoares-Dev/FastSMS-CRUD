@@ -85,6 +85,12 @@ class User
         }
     }
 
+    /**
+     * Atualiza um usuário existente pelo ID e dados fornecidos no corpo JSON.
+     * @param array $requestData Os dados da solicitação JSON que contém o ID e os dados a serem atualizados.
+     * @return string Uma mensagem de sucesso.
+     * @throws \Exception Se a atualização falhar.
+     */
     public static function updateUser($id, $data)
     {
         $connPdo = new \PDO(DBDRIVE . ': host=' . DBHOST . '; dbname=' . DBNAME, DBUSER, DBPASS);

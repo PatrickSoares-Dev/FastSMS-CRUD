@@ -2,33 +2,25 @@
 namespace App\Services;
 
 use App\Models\User;
-use App\Services\AuthService;
 use Firebase\JWT\JWT;
 
 class UserService
 {   
-    private $authService;
-
-    public function __construct()
-    {
-        $this->authService = new AuthService();
-    }
-
     public function processRequest($url, $queryParams)
     {
-        $endpoint = array_shift($url);        
+        $endpoint = array_shift($url);
 
         switch ($endpoint) {
             case 'getUser':
                 return $this->getUser($queryParams);
             case 'updateUserById':
-                return $this->updateUserById($queryParams);
+                    return $this->updateUserById($queryParams);
             case 'registerUser':
                 return $this->registerUser($_POST);
             case 'deleteUserById':
                 return $this->deleteUserById($queryParams);
             case 'userLogin': 
-                return $this->userLogin();              
+                    return $this->userLogin();              
             case 'twofa': 
                 return $this->twofaAuth($_POST); 
             default:
@@ -112,6 +104,13 @@ class UserService
         }
     }
 
+
+
+    /**
+     * Atualiza um usuário pelo ID.     
+     * @param int $id O ID do usuário a ser atualizado.
+     * @return string Uma mensagem de sucesso.
+    */
     public function updateUserById($requestData)
     {
         try {
@@ -142,7 +141,6 @@ class UserService
             return ['status' => 'error', 'message' => $e->getMessage()];
         }
     }
-    
 
     public function deleteUserById($queryParams)
     {
@@ -178,12 +176,16 @@ class UserService
                 if ($userStatus === 'Sucesso') {
                     // Consulta o banco de dados para obter os detalhes do usuário
                     $authenticatedUser = User::selectUserByField($field, $loginOrEmail);
-    
+
                     if ($authenticatedUser) {
                         http_response_code(200);
-    
-                        // Autentica o usuário e retorna a resposta
-                        return $this->authService->authenticateUser($authenticatedUser);
+
+                        // Retorna um array com as informações, incluindo o ID do usuário
+                        return [
+                            'status' => 'success',
+                            'message' => 'Autenticação bem sucedida.',
+                            'user_id' => $authenticatedUser['id'] // ID do usuário autenticado
+                        ];
                     } else {
                         http_response_code(401);
                         return [

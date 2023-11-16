@@ -25,6 +25,7 @@ $rota = ltrim(str_replace("/$baseFolder", '', $currentURL), '/');
 // Remove a barra inicial, se presente
 $rota = ltrim($rota, '/');
 
+
 // Separe as partes da URL
 $parts = explode("/", $rota);
 
