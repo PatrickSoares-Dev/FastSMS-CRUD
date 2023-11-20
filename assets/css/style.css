@@ -1,0 +1,90 @@
+
+/* data tables */
+
+.tableUsers{
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px !important;
+}
+
+.dataTables_wrapper{
+    padding: 10px !important;
+}
+
+div.dt-buttons > .dt-button,
+div.dt-buttons > div.dt-button-split .dt-button {
+    background: #0d6efd !important;
+    color: #fff !important;
+    border: #0d6efd !important;
+    border-radius: 8px !important;
+}
+
+div.dt-buttons>.dt-button:hover:not(.disabled), div.dt-buttons>div.dt-button-split .dt-button:hover:not(.disabled) {
+    background: #0a58ca !important; 
+    border: #0a58ca !important; 
+}
+
+table.dataTable > tbody > tr.selected > td.select-checkbox::after, table.dataTable > tbody > tr.selected > th.select-checkbox::after {
+    content: "✓";
+    font-size: 13px !important;
+    margin-top: -11px !important;
+    margin-left: -6px !important;
+    text-align: center !important;
+}
+
+table.dataTable thead th, table.dataTable tfoot th {
+    font-weight: 600 !important;
+}
+
+.deleteModal{
+    position: relative !important;
+    flex: 1 1 auto !important;
+    padding: 20px !important;
+    margin-bottom: -10px !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+    color: white !important;
+    border: 1px solid #fff !important;
+    background-color: #111 !important;
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #585858), color-stop(100%, #111));
+    background: -webkit-linear-gradient(top, #585858 0%, #111 100%);
+    background: -moz-linear-gradient(top, #585858 0%, #111 100%);
+    background: -ms-linear-gradient(top, #585858 0%, #111 100%);
+    background: -o-linear-gradient(top, #585858 0%, #111 100%);
+    background: #0a58ca !important;
+}
+
+.dataTables_wrapper .dataTables_info {
+    clear: both;
+    float: left;
+    padding-top: 0.755em;
+    margin-top: 10px !important;
+}
+
+.dataTables_wrapper .dataTables_paginate {
+    float: right;
+    text-align: right;
+    padding-top: 0.25em;
+    margin-top: 10px !important;
+}
+  
+/* Menu */
+
+.bg-menu-theme.menu-vertical {
+    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px !important;
+}
+
+.menu:not(.menu-no-animation) .menu-link > :not(.menu-icon) {
+    transition: opacity 0.3s ease-in-out !important;
+    border-radius: 8px !important;
+}
+
+.menu-vertical .menu-inner > .menu-item .menu-link {
+    margin: 0rem 1rem !important;
+    text-decoration: none !important;
+}
+
+.menu-vertical .menu-inner {
+    flex-direction: column !important;
+    flex: 1 1 auto !important;
+    margin-top: -20px !important;
+}

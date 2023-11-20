@@ -36,8 +36,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['logoutBtn'])) {
     <link rel="stylesheet" href="assets/vendor/css/theme-default.css" class="template-customizer-theme-css" />
     <link rel="stylesheet" href="assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
     <link rel="stylesheet" href="assets\vendor\css\data_tables_editor\editor.bootstrap.min.css" />
+    <link rel="stylesheet" href="assets\css\style.css">
     <link rel="stylesheet" href="assets/css/demo.css" />
-    <link rel="stylesheet" href="assets/css/register.css">
+    <link rel="stylesheet" href="assets/css/register.css">    
 </head>
 <body>
 
@@ -78,7 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['logoutBtn'])) {
                         </li>
                         <li class="menu-item">
                             <a href="logs" class="menu-link">
-                                <div data-i18n="Without menu">Logs</div>
+                                <div data-i18n="Without menu">Registros</div>
                             </a>
                         </li>
                         <li class="menu-item">
@@ -178,32 +179,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['logoutBtn'])) {
                     <li>
                       <a class="dropdown-item" href="#">
                         <i class="bx bx-user me-2"></i>
-                        <span class="align-middle">My Profile</span>
+                        <span class="align-middle">Perfil</span>
                       </a>
                     </li>
-                    <li>
-                      <a class="dropdown-item" href="#">
-                        <i class="bx bx-cog me-2"></i>
-                        <span class="align-middle">Settings</span>
-                      </a>
+                    <li>                     
                     </li>
                     <li>
-                      <a class="dropdown-item" href="#">
-                        <span class="d-flex align-items-center align-middle">
-                          <i class="flex-shrink-0 bx bx-credit-card me-2"></i>
-                          <span class="flex-grow-1 align-middle">Billing</span>
-                          <span class="flex-shrink-0 badge badge-center rounded-pill bg-danger w-px-20 h-px-20">4</span>
-                        </span>
-                      </a>
                     </li>
                     <li>
                       <div class="dropdown-divider"></div>
                     </li>
                     <li>
-                      <a class="dropdown-item" href="auth-login-basic.html">
-                        <i class="bx bx-power-off me-2"></i>
-                        <span class="align-middle">Log Out</span>
-                      </a>
+                    <form id="logoutForm" action="" method="post">
+                        <a class="dropdown-item" id="logoutBtn" href="#">
+                            <i class="bx bx-power-off me-2"></i>
+                            <span class="align-middle">Deslogar</span>
+                        </a>
+                    </form>
                     </li>
                   </ul>
                 </li>
@@ -266,6 +258,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['logoutBtn'])) {
       });
     </script>
 
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="assets/js/jquery-3.3.1.min.js"></script>
 	<script src="assets/js/jquery.form-validator.min.js"></script>
   <script src="assets/vendor/js/bootstrap.js"></script>

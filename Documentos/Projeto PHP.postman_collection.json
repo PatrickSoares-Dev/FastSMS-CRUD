@@ -15,6 +15,14 @@
 			"response": []
 		},
 		{
+			"name": "/getUser Copy",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
 			"name": "/registerNewUser",
 			"request": {
 				"method": "GET",
@@ -24,6 +32,14 @@
 		},
 		{
 			"name": "/userLogin",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "/getAllLogs",
 			"request": {
 				"method": "GET",
 				"header": []
@@ -74,7 +90,7 @@
 			"response": []
 		},
 		{
-			"name": "/updateUserById NF",
+			"name": "/updateUserById",
 			"request": {
 				"method": "POST",
 				"header": [
@@ -107,7 +123,93 @@
 			"response": []
 		},
 		{
+			"name": "/forgotUser",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": 123,\r\n    \"data\": {\r\n        \"nome\": \"Novo Nome\",\r\n        \"data_nascimento\": \"Nova Data\",\r\n        \"sexo\": \"Novo Sexo\"\r\n        // Outros campos a serem atualizados\r\n    }\r\n}\r\n"
+				},
+				"url": {
+					"raw": "http://localhost/GR-06-2023-2-BG-PATRICK-OLIVEIRA/API/public_html/api/user/forgotUser?email=patrick@gmail.com",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"GR-06-2023-2-BG-PATRICK-OLIVEIRA",
+						"API",
+						"public_html",
+						"api",
+						"user",
+						"forgotUser"
+					],
+					"query": [
+						{
+							"key": "email",
+							"value": "patrick@gmail.com"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/updateForgotUser",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": 123,\r\n    \"data\": {\r\n        \"nome\": \"Novo Nome\",\r\n        \"data_nascimento\": \"Nova Data\",\r\n        \"sexo\": \"Novo Sexo\"\r\n        // Outros campos a serem atualizados\r\n    }\r\n}\r\n"
+				},
+				"url": {
+					"raw": "http://localhost/GR-06-2023-2-BG-PATRICK-OLIVEIRA/API/public_html/api/user/forgotUser?email=patrick@gmail.com",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"GR-06-2023-2-BG-PATRICK-OLIVEIRA",
+						"API",
+						"public_html",
+						"api",
+						"user",
+						"forgotUser"
+					],
+					"query": [
+						{
+							"key": "email",
+							"value": "patrick@gmail.com"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "/deleteUserById",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "/deleteLogs",
 			"request": {
 				"method": "GET",
 				"header": []

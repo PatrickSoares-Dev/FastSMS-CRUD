@@ -22,10 +22,10 @@
                                     <div class="card-body">
                                         <h5 class="card-title text-primary">Parabéns <?php echo $_SESSION['user_name']; ?> 🎉</h5>
                                         <p class="mb-4">
-                                            Você alcançou <span class="fw-bold">{porcentagem_sim}</span> de alcance em suas campanhas de SMS.
+                                            Você alcançou <span class="fw-bold">{porcentagem_sim}</span> de usuários na sua plataforma.
                                         </p>
 
-                                        <a href="javascript:;" class="btn btn-sm btn-outline-primary">Ver histórico</a>
+                                        <a href="users" class="btn btn-sm btn-outline-primary">Ver usuários</a>
                                     </div>
                                 </div>
                                 <div class="col-sm-5 text-center text-sm-left">

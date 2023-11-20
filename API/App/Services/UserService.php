@@ -13,6 +13,8 @@ class UserService
         switch ($endpoint) {
             case 'getUser':
                 return $this->getUser($queryParams);
+            case 'checkEmailExists':
+                    return $this->checkEmailExists($queryParams);
             case 'updateUserById':
                     return $this->updateUserById($queryParams);
             case 'registerUser':
@@ -23,6 +25,15 @@ class UserService
                     return $this->userLogin();              
             case 'twofa': 
                 return $this->twofaAuth($_POST); 
+            case 'getAllLogs':
+                return $this->getAllLogs();
+            case 'deleteLog':
+                    return $this->deleteLog($queryParams);
+            case 'forgotUser':
+                return $this->forgotUser($queryParams);
+            case 'updateForgotUser':
+                return $this->updateForgotUser($_POST); // Se os dados estiverem no corpo da solicitação POST
+                
             default:
                 throw new \Exception("Endpoint não encontrado!", 404);
         }
@@ -43,6 +54,26 @@ class UserService
             } else {
                 $users = User::selectAllUser();
                 return ['status' => 'success', 'data' => $users];
+            }
+        } catch (\Exception $e) {
+            return ['status' => 'error', 'message' => $e->getMessage()];
+        }
+    }
+
+    public function checkEmailExists($queryParams)
+    {
+        try {
+            if (isset($queryParams['email'])) {
+                $email = $queryParams['email'];
+                $user = User::selectUserByField('email', $email);
+                
+                if ($user) {
+                    return ['status' => 'success', 'message' => 'Email encontrado no banco de dados.'];
+                } else {
+                    return ['status' => 'success', 'message' => 'Email não encontrado no banco de dados.'];
+                }
+            } else {
+                throw new \Exception("O parâmetro 'email' não foi fornecido na solicitação.", 400);
             }
         } catch (\Exception $e) {
             return ['status' => 'error', 'message' => $e->getMessage()];
@@ -180,10 +211,20 @@ class UserService
                     if ($authenticatedUser) {
                         http_response_code(200);
 
+                        
+                        $logDataSuccess = [
+                            'email_usuario' => $authenticatedUser['email'],
+                            'tipo_acao' => 'UserLoginSuccess',
+                            'descricao_log' => 'Autenticação bem-sucedida. Necessário segundo fator de autenticação.',
+                            'data_log' => date('Y-m-d H:i:s'),
+                        ];
+    
+                        User::insertLog($logDataSuccess);
+
                         // Retorna um array com as informações, incluindo o ID do usuário
                         return [
                             'status' => 'success',
-                            'message' => 'Autenticação bem sucedida.',
+                            'message' => 'Autenticação bem sucedida. Necessário segundo fator de autenticação.',
                             'user_id' => $authenticatedUser['id'] // ID do usuário autenticado
                         ];
                     } else {
@@ -244,16 +285,42 @@ class UserService
             // Verifique a pergunta atual
             if ($currentQuestion === 'twofa_mae' && $userDetails['mae'] === $answer) {
                 error_log($answer . $userDetails['mae']);
+
+                $logDataSuccess = [
+                    'email_usuario' => $userDetails['email'],
+                    'tipo_acao' => 'TwofaSuccess',
+                    'descricao_log' => "Confirmou segundo fator de autenticação: pergunta escolhida. - ($currentQuestion)",
+                    'data_log' => date('Y-m-d H:i:s'),
+                ];
+                User::insertLog($logDataSuccess);
+
                 $correctAnswers++;
+
             } elseif ($currentQuestion === 'twofa_data' && $userDetails['dataNascimento'] === $answer) {
+                $logDataSuccess = [
+                    'email_usuario' => $userDetails['email'],
+                    'tipo_acao' => 'TwofaSuccess',
+                    'descricao_log' => "Confirmou segundo fator de autenticação: pergunta escolhida. - ($currentQuestion)",
+                    'data_log' => date('Y-m-d H:i:s'),
+                ];
+                User::insertLog($logDataSuccess);
+
                 $correctAnswers++;
+
             } elseif ($currentQuestion === 'twofa_cep' && $userDetails['cep'] === $answer) {
+                $logDataSuccess = [
+                    'email_usuario' => $userDetails['email'],
+                    'tipo_acao' => 'TwofaSuccess',
+                    'descricao_log' => "Confirmou segundo fator de autenticação: pergunta escolhida. - ($currentQuestion)",
+                    'data_log' => date('Y-m-d H:i:s'),
+                ];
+
+                User::insertLog($logDataSuccess);
                 $correctAnswers++;
             }
 
             if ($correctAnswers === 1) {
-                // Usuário autenticado com sucesso
-                error_log("Usuário autenticado com sucesso"); // Mensagem de log
+                
 
                 // Crie a sessão e um token de acesso
                 $tokenPayload = [
@@ -273,7 +340,8 @@ class UserService
                 $_SESSION['user_name'] = $userDetails['login'];
                 $_SESSION['token'] = $token;
                 $_SESSION['exp'] = $tokenPayload['exp'];
-                
+
+                $expiration = date('Y-m-d H:i:s', $tokenPayload['exp']);                
 
                 // Construa a resposta com o token JWT e informações do usuário
                 $response = [
@@ -288,6 +356,15 @@ class UserService
                     ]
                 ];
 
+                $logDataSuccess = [
+                    'email_usuario' => $userDetails['email'],
+                    'tipo_acao' => 'UserLogin',
+                    'descricao_log' => "O usuário se autenticou no sistema FastSMS - Data de expiração do token: $expiration",
+                    'data_log' => date('Y-m-d H:i:s'),
+                ];
+                
+                User::insertLog($logDataSuccess);
+
                 http_response_code(200);
                
 
@@ -295,6 +372,15 @@ class UserService
             } else {
                 // Perguntas de autenticação incorretas
                 error_log("Respostas incorretas nas perguntas de autenticação"); // Mensagem de log
+
+                $logDataFailed = [
+                    'email_usuario' => $userDetails['email'], // Preencher com o email, se disponível
+                    'tipo_acao' => 'TwofaFailed',
+                    'descricao_log' => "Respostas incorretas nas perguntas de autenticação. - ($currentQuestion)",
+                    'data_log' => date('Y-m-d H:i:s'),
+                ];
+    
+                User::insertLog($logDataFailed);
 
                 http_response_code(401);
                 return [
@@ -312,6 +398,124 @@ class UserService
             ];
         }
     }  
+
+    public function forgotUser($queryParams)
+    {
+        try {
+            if (isset($queryParams['email']) && isset($queryParams['question']) && isset($queryParams['answer'])) {
+                // Buscar o usuário pelo email no banco de dados
+                $user = User::selectUserByField('email', $queryParams['email']);
+
+                if (!$user) {
+                    throw new \Exception("Usuário não encontrado para o email fornecido.");
+                }
+
+                // Obter a pergunta e a resposta fornecidas
+                $question = $queryParams['question'];
+                $providedAnswer = $queryParams['answer'];
+
+                $UserEmail = $user['email'];
+
+                // Verificar se a pergunta está entre as perguntas de segurança permitidas
+                if ($question !== 'mae' && $question !== 'dataNascimento' && $question !== 'cep') {
+
+                    $logDataError = [
+                        'email_usuario' => $UserEmail ,
+                        'tipo_acao' => 'ForgotPasswordError',
+                        'descricao_log' => "O usuário $UserEmail solicitou a alteração de senha e errou a pergunta de segurança.",
+                        'data_log' => date('Y-m-d H:i:s'),
+                    ];
+                    
+                    User::insertLog($logDataError);
+
+                    throw new \Exception("Pergunta de segurança inválida.");
+                }
+
+                // Verificar se a resposta fornecida corresponde à resposta no banco de dados
+                if ($user[$question] === $providedAnswer) {
+                    
+                    $logDataSuccess = [
+                        'email_usuario' => $UserEmail ,
+                        'tipo_acao' => 'ForgotPasswordSucess',
+                        'descricao_log' => "O usuário $UserEmail solicitou a alteração de senha e acertou a pergunta de segurança.",
+                        'data_log' => date('Y-m-d H:i:s'),
+                    ];
+                    
+                    User::insertLog($logDataSuccess);
+
+                    return ['status' => 'success', 'message' => 'Resposta de segurança correta.'];
+                } else {
+                    // Resposta incorreta
+                    throw new \Exception("Resposta de segurança incorreta.");
+                }
+            } else {
+                throw new \Exception("Dados incompletos na solicitação.");
+            }
+        } catch (\Exception $e) {
+            return ['status' => 'error', 'message' => $e->getMessage()];
+        }
+}
+
+    public function updateForgotUser($requestData)
+    {
+        try {
+            if (isset($requestData['email']) && isset($requestData['novaSenha'])) {
+                // Buscar o usuário pelo email no banco de dados
+                $user = User::selectUserByField('email', $requestData['email']);
+
+                if (!$user) {
+                    throw new \Exception("Usuário não encontrado para o email fornecido.");
+                }
+
+                // Atualizar a senha do usuário
+                $user['senha'] = $requestData['novaSenha'];
+                $message = User::updateUser($user['id'], $user);
+                
+                $UserEmail  = $user['email'];
+
+                $logDataSuccess = [
+                    'email_usuario' => $UserEmail ,
+                    'tipo_acao' => 'ForgotPasswordSucess',
+                    'descricao_log' => "O usuário $UserEmail alterou a senha.",
+                    'data_log' => date('Y-m-d H:i:s'),
+                ];
+
+                User::insertLog($logDataSuccess);
+
+                return ['status' => 'success', 'message' => $message];
+            } else {
+                throw new \Exception("Email do usuário ou nova senha não fornecidos na solicitação.");
+            }
+        } catch (\Exception $e) {
+            return ['status' => 'error', 'message' => $e->getMessage()];
+        }
+    }
+
+
+    public function getAllLogs()
+    {
+        try {
+            $logs = User::selectAllLogs();
+            return ['status' => 'success', 'data' => $logs];
+        } catch (\Exception $e) {
+            return ['status' => 'error', 'message' => $e->getMessage()];
+        }
+    }
+
+    public function deleteLog($queryParams)
+    {
+        try {
+            if (isset($queryParams['id'])) {
+                $logId = $queryParams['id'];
+                $message = User::deleteLogById($logId);
+                return ['status' => 'success', 'message' => $message];
+            } else {
+                throw new \Exception("ID do log não fornecido na solicitação.", 400);
+            }
+        } catch (\Exception $e) {
+            return ['status' => 'error', 'message' => $e->getMessage()];
+        }
+    }
 
 }
 ?>

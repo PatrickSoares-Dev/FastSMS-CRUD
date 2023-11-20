@@ -22,56 +22,8 @@
           <div class="content-wrapper">            
             <div class="container-xxl flex-grow-1 container-p-y">
               <h4 class="fw-semibold py-3 mb-4"><span class="text-muted fw-light">Admin /</span> Lista de usuários</h4>
-
-              <div class="card mb-4">
-                <h5 class="card-header">Filtro de usuários</h5>
-                <div class="card-body">
-                  <div class="row gx-3 gy-2 align-items-center">
-                    <div class="col-md-3">
-                        <div>
-                            <label for="defaultFormControlInput" class="form-label">Nome</label>
-                            <input
-                            type="text"
-                            class="form-control"
-                            id="defaultFormControlInput"
-                            placeholder="Patrick Oliveira"
-                            aria-describedby="defaultFormControlHelp"
-                            />
-                      </div>
-                    </div>
-                    <div class="col-md-2">
-
-                        <label for="defaultSelect" class="form-label">UF</label>
-                        <select id="defaultSelect" class="form-select">
-                        <option>RJ</option>
-                        <option value="1">RJ</option>
-                        <option value="2">SP</option>
-                        <option value="3">MG</option>
-                        </select>
-
-                    </div>
-                    
-                    <div class="col-md-3">
-                        <div>
-                            <label for="defaultFormControlInput" class="form-label">Cidade</label>
-                            <input
-                            type="text"
-                            class="form-control"
-                            id="defaultFormControlInput"
-                            placeholder="Rio de Janeiro"
-                            aria-describedby="defaultFormControlHelp"
-                            />
-                      </div>
-                    </div>
-                    <div class="col-md-2 float-right">
-                        <label class="form-label" for="showToastPlacement">&nbsp;</label>
-                        <button id="showToastPlacement" class="btn btn-primary d-block">Buscar</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="card mb-4">
+              
+              <div class="card mb-4 tableUsers">
                 <h5 class="card-header">Usuários</h5>     
                 <div class="table-responsive text-nowrap">
                 <table id="TableUsers" class="display" cellspacing="0" width="100%">
@@ -286,10 +238,11 @@
                                     </div>                                          
                                 </div>
 
-                                <div class="mt-2">
+                                <div class="mt-2 d-flex justify-content-end">
+                                    <button type="reset" class="btn btn-outline-secondary mr-2" data-bs-dismiss="modal">Cancelar</button>
                                     <button type="button" class="btn btn-primary me-2" id='btnCreateUser'>Criar usuário</button>
-                                    <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
                                 </div>
+
                             </form>
                         </div>
                     </div>
@@ -334,7 +287,7 @@
                                 <div class="row">
                                     <div class="mb-3 col-md-6">
                                         <label for="dataNascimento" class="form-label">Data de Nascimento</label>
-                                        <input class="form-control" type="date" id="dataNascimento" name="dataNascimento" />
+                                        <input class="form-control" type="date" id="dataNascimento" name="dataNascimento" disabled />
                                     </div>
                                     <div class="mb-3 col-md-6">
                                         <label for="sexo" class="form-label">Sexo</label>
@@ -429,10 +382,11 @@
                                       </select>
                                     </div>                                          
                                 </div>
+
                                 <!-- Adicione mais divs com campos adicionais conforme necessário -->
-                                <div class="mt-2">
-                                    <button type="button" class="btn btn-primary me-2">Salvar alterações</button>
-                                    <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                <div class="mt-2 d-flex justify-content-end">
+                                    <button type="reset" class="btn btn-outline-secondary mr-2" data-bs-dismiss="modal">Cancelar</button>
+                                    <button type="button" class="btn btn-primary me-2">Salvar alterações</button>                                    
                                 </div>
                             </form>
                         </div>
@@ -450,7 +404,7 @@
                 <h5 class="modal-title" id="deleteUserModalLabel">Excluir usuário - <span id="userNameToDelete"></span></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body deleteModal">
                 <p>Você deseja excluir o usuário <span id="userToDelete"></span>?</p>
             </div>
             <div class="modal-footer">
@@ -470,28 +424,3 @@
   <script src="assets\js\dataTables.dateTime.min.js"></script>
   <script src="assets\js\scripts_pages\Admin\user.js"></script>
 </html>
-
-
-<!-- <div id="successToast" class="bs-toast toast fade bg-success" role="alert" aria-live="assertive" aria-atomic="true">
-      <div class="toast-header">
-          <i class="bx bx-bell me-2"></i>
-          <div class="me-auto fw-semibold">Sucesso</div>
-          <small>11 mins ago</small>
-          <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-      </div>
-      <div class="toast-body">
-          Toast de sucesso: ação realizada com êxito.
-      </div>
-  </div>
-
-  <div id="errorToast" class="bs-toast toast fade bg-danger" role="alert" aria-live="assertive" aria-atomic="true">
-      <div class="toast-header">
-          <i class="bx bx-bell me-2"></i>
-          <div class="me-auto fw-semibold">Erro</div>
-          <small>11 mins ago</small>
-          <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-      </div>
-      <div class="toast-body">
-          Toast de erro: algo deu errado.
-      </div>
-  </div> -->

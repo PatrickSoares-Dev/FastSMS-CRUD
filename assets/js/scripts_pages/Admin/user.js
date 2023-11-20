@@ -11,8 +11,6 @@ document.addEventListener('DOMContentLoaded', function () {
                         ...user 
                     }));
 
-                    console.log(usersData);
-
                     initDataTable(usersData);
                 } else {
                     console.error('Erro ao buscar usuários:', data.message);
@@ -24,30 +22,38 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    function destroyAndRecreateTable() {
+        $('#TableUsers').DataTable().destroy();
+        $('#TableUsers').remove();
+        getUser()
+    }
+
     let updatedFields = {};
 
     function updateUser(userId, fieldName, fieldValue) {
         $.ajax({
-            url: `http://localhost/GR-06-2023-2-BG-PATRICK-OLIVEIRA/API/public_html/api/user/updateUserById?id=${userId}&${fieldName}=${fieldValue}`,
-            type: 'POST',
-            success: function (response) {
-                if (response.status === 'success') {
-                    alert('Informações atualizadas com sucesso.');
-                    getUser();
-                } else {
-                    alert('Erro ao atualizar informações.');
-                }
-            },
-            error: function (error) {
-                alert('Erro ao atualizar informações.');
+          url: `http://localhost/GR-06-2023-2-BG-PATRICK-OLIVEIRA/API/public_html/api/user/updateUserById?id=${userId}&${fieldName}=${fieldValue}`,
+          type: 'POST',
+          success: function (response) {
+            if (response.status === 'success') {
+              showToast('success', `Informações atualizadas com sucesso.`);
+              $('#userDetailsModal').modal('hide');
+              setTimeout(function() {
+                location.reload(); // Recarrega a página após 3 segundos
+              }, 3000);
+            } else {
+              showToast('error', 'Erro ao atualizar informações.');
             }
+          },
+          error: function (error) {
+            showToast('error', 'Erro ao atualizar informações.');
+          }
         });
-    }
+      }
 
     function deleteUser(userId, userName) {
         $('#userNameToDelete').text(userName);
         $('#userToDelete').text(userName);
-        
         $('#deleteUserModal').modal('show');
         
         $('#confirmDeleteBtn').off().on('click', function() {
@@ -56,17 +62,19 @@ document.addEventListener('DOMContentLoaded', function () {
                 type: 'POST',
                 success: function (response) {
                     if (response.status === 'success') {
-                        alert('Usuário excluído com sucesso.');
+                        showToast('success', `Usuário ${userId} excluído com sucesso.`);
                         $('#deleteUserModal').modal('hide');
-                        
-                        getUser();
+                        setTimeout(function() {
+                            location.reload(); // Recarrega a página após 3 segundos
+                        }, 3000);
+                
                     } else {
-                        alert('Erro ao excluir usuário.');
+                        showToast('error', `Erro ao excluir usuário ${userId}.`);
                         $('#deleteUserModal').modal('hide');
                     }
                 },
                 error: function (error) {
-                    alert('Erro ao excluir usuário.');
+                    showToast('error', `Erro ao excluir usuário ${userId}.`);
                     $('#deleteUserModal').modal('hide');
                 }
             });
@@ -75,6 +83,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function registerUser(userData) {
         const formData = $.param(userData);
+
+        console.log(formData);
     
         $.ajax({
             url: 'http://localhost/GR-06-2023-2-BG-PATRICK-OLIVEIRA/API/public_html/api/user/registerUser',
@@ -83,13 +93,18 @@ document.addEventListener('DOMContentLoaded', function () {
             data: formData,
             success: function (data) {
                 if (data.data.status === 'success') {
-                    showToast("toast-success", data.data.message);
+                    const login = userData.login; // Obtém o login do usuário
+                    showToast('success', `Usuário ${login} criado com sucesso`);
+                    $('#deleteUserModal').modal('hide');
+                    setTimeout(function() {
+                      location.reload(); // Recarrega a página após 3 segundos
+                    }, 3000);
                 } else {
-                    showToast("toast-error", data.data.message);
+                    showToast('error', `Não foi possível criar o usuário.`);
                 }
             },
             error: function (error) {
-                showToast("toast-error", "Erro na requisição: " + error.statusText);
+                showToast('error', `Error ` + error.statusText);
             }
         });
     }
@@ -137,7 +152,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const table = new DataTable('#TableUsers', {
             data: usersData,
             columns: [
-                { data: null, defaultContent: '', className: 'select-checkbox', orderable: false },
+                { data: null, defaultContent: '', className: 'select-checkbox form-check-input', orderable: false },
                 { data: 'id'},
                 { data: 'nome'},
                 { data: 'mae'},
@@ -174,6 +189,7 @@ document.addEventListener('DOMContentLoaded', function () {
             buttons: [
                 {
                     text: 'Novo',
+                    className: 'btn btn-primary',
                     action: function () {                                                
 
                         let userCreateModal = document.getElementById('userCreateModal');
@@ -601,7 +617,10 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
                 },
                 {
+                    extend: 'edit',
+                    editor: editor,
                     text: 'Detalhes',
+                    className: 'btn btn-primary',                    
                     action: function (e, dt, node, config) {
                         let selectedRows = dt.rows({ selected: true }).data();
                         if (selectedRows.length > 0) {
@@ -672,6 +691,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     extend: 'remove',
                     editor: editor,
                     text: 'Remover',
+                    className: 'btn btn-primary',
                     action: function (e, dt, node, config) {
                         let selectedRows = dt.rows({ selected: true }).data();
                         if (selectedRows.length > 0) {
@@ -695,6 +715,32 @@ document.addEventListener('DOMContentLoaded', function () {
         
     }
 
-    getUser();    
+    getUser(); 
+       
+
+    function showToast(status, message) {
+        const icons = {
+          success: 'success',
+          error: 'error'
+          // Adicione outros ícones conforme necessário
+        };
       
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          }
+        });
+      
+        Toast.fire({
+          icon: icons[status],
+          title: message
+        });
+      }
+    
 });

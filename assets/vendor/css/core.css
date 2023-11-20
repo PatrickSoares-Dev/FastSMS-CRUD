@@ -15388,6 +15388,7 @@ html:not(.layout-menu-fixed) .menu-inner-shadow {
   width: 0;
   min-width: 0;
   max-width: 100%;
+  background-color: #F5F5F5;
 }
 .layout-content-navbar .content-wrapper {
   width: 100%;
