@@ -1,6 +1,6 @@
 <?php
 
-    $url = 'http://localhost/GR-09-2023-2-BG-PATRICK-OLIVEIRA/API/public_html/api';
+    $url = 'http://localhost/GR-06-2023-2-BG-PATRICK-OLIVEIRA/API/public_html/api';
 
     $class = '/user'; // Use "/user" para acessar o UserService
     $param = '';

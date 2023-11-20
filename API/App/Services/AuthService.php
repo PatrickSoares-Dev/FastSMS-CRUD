@@ -18,7 +18,7 @@ class AuthService
         session_destroy();
     
         // Redireciona para a página de login
-        header("Location: http://localhost/GR-09-2023-2-BG-PATRICK-OLIVEIRA/login");
+        header("Location: http://localhost/GR-06-2023-2-BG-PATRICK-OLIVEIRA/login");
         exit;
     }
 
@@ -36,7 +36,7 @@ class AuthService
             return ['status' => 'error', 'message' => 'Ocorreu um erro ao mostrar a página.'];
         }
 
-        $perfilAdminPermitido = 'admin'; // Ajuste conforme necessário
+        $perfilAdminPermitido = 'Admin'; // Ajuste conforme necessário
 
         // Se a página requer permissão de administrador
         if ($this->paginaRequerPermissaoAdmin($currentPage) && $_SESSION['tipo_user'] !== $perfilAdminPermitido) {

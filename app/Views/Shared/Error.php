@@ -31,7 +31,7 @@
                         echo '<p>Ocorreu um erro.</p>';
                     }
                 ?>
-                <a href="http://localhost/GR-09-2023-2-BG-PATRICK-OLIVEIRA/login" class="btn btn-primary">Volte para a página inicial.</a>
+                <a href="http://localhost/GR-06-2023-2-BG-PATRICK-OLIVEIRA/login" class="btn btn-primary">Volte para a página inicial.</a>
             </div>           
         </div>
         <div class="misc-wrapper">            

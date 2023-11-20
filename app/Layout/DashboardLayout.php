@@ -28,13 +28,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['logoutBtn'])) {
 
     <!-- CSS -->
     
-    <link rel="stylesheet" href="assets/vendor/fonts/boxicons.css" />
+    <link rel="stylesheet" href="assets/vendor/fonts/boxicons.css" />    
     <link rel="stylesheet" href="assets/vendor/css/core.css" class="template-customizer-core-css" />
     <link rel="stylesheet" href="assets/vendor/libs/bootstrap/bootstrap.min.css" class="" />
     <link rel="stylesheet" href="assets/vendor/libs/bootstrap/bootstrap-grid.css" class="" />
     <link rel="stylesheet" href="assets/vendor/libs/bootstrap/bootstrap.css" class="" />
     <link rel="stylesheet" href="assets/vendor/css/theme-default.css" class="template-customizer-theme-css" />
     <link rel="stylesheet" href="assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
+    <link rel="stylesheet" href="assets\vendor\css\data_tables_editor\editor.bootstrap.min.css" />
     <link rel="stylesheet" href="assets/css/demo.css" />
     <link rel="stylesheet" href="assets/css/register.css">
 </head>
@@ -62,7 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['logoutBtn'])) {
             </li>
 
             <!-- Admin Menu -->
-            <?php if ($_SESSION['tipo_user'] === 'admin'): ?>
+            <?php if ($_SESSION['tipo_user'] === 'Admin'): ?>
                 <li class="menu-item">
                     <a href="javascript:void(0);" class="menu-link menu-toggle">
                         <i class="menu-icon tf-icons bx bx-user"></i>
@@ -209,7 +210,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['logoutBtn'])) {
                 <!--/ User -->
               </ul>
             </div>
-          </nav>
+          </nav>                    
 
           <!-- Content wrapper -->
           <div class="content-wrapper">
@@ -238,7 +239,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['logoutBtn'])) {
                   }    
               } else {
                   // Se houver um erro na verificação do usuário, inclua a página de erro diretamente
-                  header("Location: http://localhost/GR-09-2023-2-BG-PATRICK-OLIVEIRA/error");
+                  header("Location: http://localhost/GR-06-2023-2-BG-PATRICK-OLIVEIRA/error");
               }
 
               ob_end_flush(); // Libera o conteúdo do buffer de saída
@@ -252,9 +253,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['logoutBtn'])) {
       </div>
     </div>
 
+  
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.min.js" integrity="sha512-WW8/jxkELe2CAiE4LvQfwm1rajOS8PHasCCx+knHG0gBHt8EXxS6T6tJRTGuDQVnluuAvMxWF4j8SNFDKceLFg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script src="https://code.jquery.com/jquery-3.6.4.min.js" crossorigin="anonymous"></script>
+
   <script>
       $(document).ready(function(){
         $('.menu-toggle').click(function(){
@@ -265,9 +268,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['logoutBtn'])) {
 
   <script src="assets/js/jquery-3.3.1.min.js"></script>
 	<script src="assets/js/jquery.form-validator.min.js"></script>
+  <script src="assets/vendor/js/bootstrap.js"></script>
 	<script src="assets/vendor/libs/jquery/jquery.js"></script>
-	<script src="assets/vendor/libs/popper/popper.js"></script>
-  <script src="assets/vendor/js/bootstrap.min.js"></script>
+	<script src="assets/vendor/libs/popper/popper.js"></script>  
 	<script src="assets/vendor/js/bootstrap.js"></script>
 	<script src="assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/imask/6.0.5/imask.min.js"></script>	

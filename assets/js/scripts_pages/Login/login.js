@@ -40,7 +40,7 @@ function sendRequest(userData) {
     const formData = $.param(userData);
 
     $.ajax({
-        url: 'http://localhost/GR-09-2023-2-BG-PATRICK-OLIVEIRA/API/public_html/api/user/userLogin',
+        url: 'http://localhost/GR-06-2023-2-BG-PATRICK-OLIVEIRA/API/public_html/api/user/userLogin',
         type: 'POST',
         contentType: 'application/x-www-form-urlencoded',
         data: formData,
@@ -131,7 +131,7 @@ function send2FARequest(userData) {
     const formData = $.param(userData);
 
     $.ajax({
-        url: 'http://localhost/GR-09-2023-2-BG-PATRICK-OLIVEIRA/API/public_html/api/user/twofa',
+        url: 'http://localhost/GR-06-2023-2-BG-PATRICK-OLIVEIRA/API/public_html/api/user/twofa',
         type: 'POST',
         contentType: 'application/x-www-form-urlencoded',
         data: formData,
@@ -159,7 +159,7 @@ function send2FARequest(userData) {
     if(successMessage.textContent = "Autenticação bem-sucedida. Redirecionando..."){
         setTimeout(function() {
             // Redirecionar para a página /dashboard
-            window.location.href = 'http://localhost/GR-09-2023-2-BG-PATRICK-OLIVEIRA/dashboard';
+            window.location.href = 'http://localhost/GR-06-2023-2-BG-PATRICK-OLIVEIRA/dashboard';
         }, 2000);
     }
 
