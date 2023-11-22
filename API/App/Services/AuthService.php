@@ -1,13 +1,12 @@
 <?php
 namespace App\Services;
 
-use App\Models\User;
-use Firebase\JWT\JWT;
+use \App\Models\User;
+
 
 class AuthService
 
 { 
-
     public function logout()
     {
 
@@ -25,9 +24,8 @@ class AuthService
             'data_log' => date('Y-m-d H:i:s'),
         ];
 
-        User::insertLog($logDataLogout);
+        // User::insertLog($logDataLogout);
     
-
         session_destroy();
     
 
@@ -66,7 +64,7 @@ class AuthService
                 'data_log' => date('Y-m-d H:i:s'),
             ];
 
-            User::insertLog($logDataNoPermission);
+            // User::insertLog($logDataNoPermission);
             return ['status' => 'error', 'message' => 'Usuário não possui permissão para acessar esta página'];
         }
 
@@ -102,4 +100,5 @@ class AuthService
     }
         
 }
+
 ?>

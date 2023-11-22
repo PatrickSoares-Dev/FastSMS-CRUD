@@ -607,8 +607,6 @@ document.addEventListener('DOMContentLoaded', function () {
             event.target.value = value.replace(/\d/g, '');
         }
     }
-    
-
 
 });
 

@@ -117,7 +117,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['logoutBtn'])) {
 
         <!-- Layout container -->
         <div class="layout-page">
-          <!-- Navbar -->
+
           <nav
             class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
             id="layout-navbar"
@@ -129,27 +129,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['logoutBtn'])) {
             </div>
 
             <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
-              <!-- Search -->
+
               <div class="navbar-nav align-items-center">
                 <div class="nav-item d-flex align-items-center">
                   <i class="bx bx-search fs-4 lh-0"></i>
                   <input
                     type="text"
                     class="form-control border-0 shadow-none"
-                    placeholder="Search..."
-                    aria-label="Search..."
+                    placeholder="Procurar..."
+                    aria-label="Procurar..."
                   />
                 </div>
               </div>
-              <!-- /Search -->
 
               <ul class="navbar-nav flex-row align-items-center ms-auto">
-                <!-- Place this tag where you want the button to render. -->
                 
-              <!-- User -->
-              <form action="" method="post">
-                  <button type="submit" name="logoutBtn" class="btn btn-primary d-grid w-100">Deslogar</button>
-              </form>
                 <li class="nav-item navbar-dropdown dropdown-user dropdown">
                 
                   <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">                  
@@ -168,7 +162,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['logoutBtn'])) {
                           </div>
                           <div class="flex-grow-1">
                             <span class="fw-semibold d-block"><?php echo $_SESSION['user_name']; ?></span>
-                            <small class="text-muted">User</small>
+                            <small class="text-muted"><?php echo $_SESSION['tipo_user']?></small>
                           </div>
                         </div>
                       </a>
@@ -190,12 +184,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['logoutBtn'])) {
                       <div class="dropdown-divider"></div>
                     </li>
                     <li>
-                    <form id="logoutForm" action="" method="post">
-                        <a class="dropdown-item" id="logoutBtn" href="#">
-                            <i class="bx bx-power-off me-2"></i>
-                            <span class="align-middle">Deslogar</span>
-                        </a>
+
+                    <form id="logoutForm" action="" method="post" style="display: none;">
+                        <input type="hidden" name="logoutBtn" value="logout">
                     </form>
+                  
+                    <a class="dropdown-item" id="logoutBtn" href="#" onclick="logout()">
+                        <i class="bx bx-power-off me-2"></i>
+                        <span class="align-middle">Deslogar</span>
+                    </a>
+
                     </li>
                   </ul>
                 </li>
@@ -224,6 +222,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['logoutBtn'])) {
                       require_once "app\Views\Dashboard\Campanha\CampanhaSMS.php";
                   } else if ($currentPage === 'history') {
                       require_once "app\Views\Dashboard\Campanha\HistoricoCampanha.php";
+                  } else if ($currentPage === 'profile') {
+                      require_once "app\Views\Dashboard\Profile\Profile.php";
                   } else {
                       // Página de erro
                       require_once "app/Views/Shared/Error.php";
@@ -256,7 +256,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['logoutBtn'])) {
             $(this).next('.menu-sub').slideToggle();
         });
       });
-    </script>
+
+      function logout() {
+        // Obtém o formulário oculto pelo ID e o submete
+        document.getElementById('logoutForm').submit();
+      }
+  </script>
 
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="assets/js/jquery-3.3.1.min.js"></script>

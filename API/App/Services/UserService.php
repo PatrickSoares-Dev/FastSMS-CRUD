@@ -135,8 +135,6 @@ class UserService
         }
     }
 
-
-
     /**
      * Atualiza um usuário pelo ID.     
      * @param int $id O ID do usuário a ser atualizado.
@@ -210,23 +208,34 @@ class UserService
 
                     if ($authenticatedUser) {
                         http_response_code(200);
-
                         
-                        $logDataSuccess = [
-                            'email_usuario' => $authenticatedUser['email'],
-                            'tipo_acao' => 'UserLoginSuccess',
-                            'descricao_log' => 'Autenticação bem-sucedida. Necessário segundo fator de autenticação.',
-                            'data_log' => date('Y-m-d H:i:s'),
-                        ];
-    
-                        User::insertLog($logDataSuccess);
+                        if ($authenticatedUser['tipo_user'] === 'Admin') {
+                            // Crie a sessão para administrador
+                            $this->createAdminSession($authenticatedUser);
+                            // Resposta para admin
+                            return [
+                                'status' => 'success',
+                                'message' => 'Login de administrador bem-sucedido.',
+                                'user_id' => $authenticatedUser['id']
+                            ];
+                        } else {
+                            $logDataSuccess = [
+                                'email_usuario' => $authenticatedUser['email'],
+                                'tipo_acao' => 'UserLoginSuccess',
+                                'descricao_log' => 'Autenticação bem-sucedida. Necessário segundo fator de autenticação.',
+                                'data_log' => date('Y-m-d H:i:s'),
+                            ];
+        
+                            User::insertLog($logDataSuccess);
 
-                        // Retorna um array com as informações, incluindo o ID do usuário
-                        return [
-                            'status' => 'success',
-                            'message' => 'Autenticação bem sucedida. Necessário segundo fator de autenticação.',
-                            'user_id' => $authenticatedUser['id'] // ID do usuário autenticado
-                        ];
+                            return [
+                                'status' => 'success',
+                                'message' => 'Autenticação bem sucedida. Necessário segundo fator de autenticação.',
+                                'user_id' => $authenticatedUser['id'] // ID do usuário autenticado
+                            ];
+    
+                        }
+                                            
                     } else {
                         http_response_code(401);
                         return [
@@ -253,7 +262,60 @@ class UserService
                 'message' => $e->getMessage()
             ];
         }
-    }    
+    } 
+    
+    private function createAdminSession($authenticatedUser)
+    {
+        // Defina as informações necessárias para a sessão do administrador
+        $id_user = $authenticatedUser['id'];
+        $userDetails = $authenticatedUser;
+
+        $tokenPayload = [
+            'user_id' => $id_user,
+            'exp' => time() + 3600 // Define o tempo de expiração do token (1 hora)
+        ];
+        $secretKey = 'seu_segredo_secreto'; // Substitua pelo seu segredo secreto
+
+        $token = JWT::encode($tokenPayload, $secretKey, 'HS256');
+
+        // Inicie a sessão
+        session_start();
+
+        // Armazene informações do usuário na sessão
+        $_SESSION['user_id'] = $id_user;
+        $_SESSION['tipo_user'] = $userDetails['tipo_user'];
+        $_SESSION['user_name'] = $userDetails['login'];
+        $_SESSION['token'] = $token;
+        $_SESSION['exp'] = $tokenPayload['exp'];
+
+        $expiration = date('Y-m-d H:i:s', $tokenPayload['exp']);
+
+        // Construa a resposta com o token JWT e informações do usuário
+        $response = [
+            'status' => 'success',
+            'message' => 'Autenticação bem-sucedida',
+            'data' => [
+                'access_token' => $token,
+                'token_type' => 'Bearer',
+                'expires_in' => 3600,
+                'user_id' => $id_user,
+                'tipo_user' => $userDetails['tipo_user']
+            ]
+        ];
+
+        $logDataSuccess = [
+            'email_usuario' => $userDetails['email'],
+            'tipo_acao' => 'AdminLogin',
+            'descricao_log' => "O administrador se autenticou no sistema - Data de expiração do token: $expiration",
+            'data_log' => date('Y-m-d H:i:s'),
+        ];
+
+        User::insertLog($logDataSuccess);
+
+        http_response_code(200);
+
+        return $response;
+    }
 
     public function twofaAuth($requestData)
     {

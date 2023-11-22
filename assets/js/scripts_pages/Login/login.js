@@ -45,15 +45,28 @@ function sendRequest(userData) {
         contentType: 'application/x-www-form-urlencoded',
         data: formData,
         success: function (data) {
+            console.log(data);
             if (data.data.status === 'success') {
-                confirmMessage.textContent = "Confirme o segundo fator de autenticação.";
-                confirmMessage.style.display = 'block';
-                errorMessage.style.display = 'none';
 
-                idUser = data.data.user_id;
-    
-                openModalWithRandomQuestion()
+                if(data.data.message === 'Login de administrador bem-sucedido.'){
+                    confirmMessage.textContent = "Usuário admin autenticado com sucesso. Redirecionando...";
+                    confirmMessage.style.display = 'block';
+                    errorMessage.style.display = 'none';
+                
+                    setTimeout(function() {                            
+                        window.location.href = 'http://localhost/GR-06-2023-2-BG-PATRICK-OLIVEIRA/dashboard';
+                    }, 2000);
 
+                }else{
+                    confirmMessage.textContent = "Confirme o segundo fator de autenticação.";
+                    confirmMessage.style.display = 'block';
+                    errorMessage.style.display = 'none';
+                    
+                    idUser = data.data.user_id;
+        
+                    openModalWithRandomQuestion()
+                }
+                
             } else {
                 errorMessage.textContent = data.data.message;
                 errorMessage.style.display = 'block';
