@@ -149,15 +149,22 @@ function send2FARequest(userData) {
         contentType: 'application/x-www-form-urlencoded',
         data: formData,
         success: function (data) {
+            console.log(data);
+
             if (data.data.status === 'success') {
                 successMessage.textContent = "Autenticação bem-sucedida. Redirecionando...";
                 confirmMessage.style.display = 'none';
                 errorMessage.style.display = 'none';
                 successMessage.style.display = 'block';
-                $('#basicModal').modal('hide');                        
+                $('#basicModal').modal('hide');      
+                
+                setTimeout(function() {
+                    // Redirecionar para a página /dashboard
+                    window.location.href = 'http://localhost/GR-06-2023-2-BG-PATRICK-OLIVEIRA/dashboard';
+                }, 2000);
                 
             } else {
-                // Mostrar mensagem de erro no modal
+                
                 const errorMessageModal = document.querySelector("#error-messageModal");
                 errorMessageModal.textContent = "Respostas incorretas nas perguntas de autenticação";
                 errorMessageModal.style.display = 'block';
@@ -168,15 +175,6 @@ function send2FARequest(userData) {
             console.error(error);
         }
     });
-
-    if(successMessage.textContent = "Autenticação bem-sucedida. Redirecionando..."){
-        setTimeout(function() {
-            // Redirecionar para a página /dashboard
-            window.location.href = 'http://localhost/GR-06-2023-2-BG-PATRICK-OLIVEIRA/dashboard';
-        }, 2000);
-    }
-
-
 }
 
 
