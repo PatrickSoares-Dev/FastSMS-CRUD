@@ -94,10 +94,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['logoutBtn'])) {
             <li class="menu-header small text-uppercase">
             <span class="menu-header-text">Serviços</span>
             </li>
-            <li class="menu-item">
+            <!-- <li class="menu-item">
                 <a href="javascript:void(0);" class="menu-link menu-toggle">
                     <i class="menu-icon tf-icons bx bx-message-square-detail"></i> <!-- Ícone relacionado a SMS -->
-                    <div data-i18n="Gerenciar Campanhas">Campanhas</div>
+                    <!-- <div data-i18n="Gerenciar Campanhas">Campanhas</div>
                 </a>
                 <ul class="menu-sub">
                     <li class="menu-item">
@@ -111,7 +111,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['logoutBtn'])) {
                         </a>
                     </li>
                 </ul>
-            </li>
+            </li> -->
                   
         </aside>
 

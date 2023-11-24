@@ -456,7 +456,7 @@
 								<label class="form-label" for="input_login">Login</label>
 								<div class="input-group input-group-merge">
 									<input type="text" class="form-control" placeholder="patrick.oliveira"
-										aria-label="patrick.oliveira" aria-describedby="input_login" id="input_login" />
+										aria-label="patrick.oliveira" aria-describedby="input_login" id="input_login" maxlength="25" />
 								</div>
 							</div>
 

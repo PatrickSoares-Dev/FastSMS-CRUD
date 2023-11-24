@@ -403,57 +403,26 @@ document.addEventListener('DOMContentLoaded', function () {
             contentType: 'application/x-www-form-urlencoded',
             data: formData,
             success: function (data) {
+
+                console.log(data)
+
                 if (data.data.status === 'success') {
-                    showToast("toast-success", data.data.message);
+                    showToast('success', data.data.message);
     
                     // Redirect to the login page after 5 seconds
                     setTimeout(function () {
                         window.location.href = 'http://localhost/GR-06-2023-2-BG-PATRICK-OLIVEIRA/login'; // Replace with the actual URL of your login page
                     }, 5000);
                 } else {
-                    showToast("toast-error", data.data.message);
+                    showToast('error', data.data.message);
                 }
             },
             error: function (error) {
-                showToast("toast-error", "Erro na requisição: " + error.statusText);
+                showToast('error', "Erro na requisição: " + error.statusText);                
             }
         });
     }
     
-    // Função para exibir um toast
-    function showToast(toastClass, message) {
-        const toastElement = document.querySelector("#" + toastClass);
-        const toastBody = toastElement.querySelector(".toast-body");
-        const toastHeader = toastElement.querySelector(".toast-header");
-        const toastType = toastClass === "toast-success" ? "Success" : "Error";
-    
-        toastHeader.querySelector("div.fw-semibold").textContent = toastType;
-        toastBody.textContent = message;
-        toastElement.classList.add("show");
-        setTimeout(() => {
-            toastElement.classList.remove("show");
-        }, 2000);
-    }
-
-    // Encontre o elemento do botão e o elemento do toast
-    const toastPlacementBtn = document.getElementById("showToastPlacement");
-    const toastPlacementExample = document.querySelector(".toast-placement-ex");
-
-    // Adicione um ouvinte de evento de clique ao botão
-    if (toastPlacementBtn && toastPlacementExample) {
-        toastPlacementBtn.addEventListener("click", function () {
-            selectedType = document.querySelector('#selectTypeOpt').value;
-            selectedPlacement = document.querySelector('#selectPlacement').value.split(' ');
-
-            toastPlacementExample.classList.add(selectedType);
-            selectedPlacement.forEach((placementClass) => {
-                toastPlacementExample.classList.add(placementClass);
-            });
-
-            showToast(toastPlacementExample, "Esta é uma mensagem de exemplo.");
-        });
-    }
-
     // Adicione um evento de clique ao botão
     btnSubmitForm.addEventListener('click', function () {
         // Array com os campos obrigatórios
@@ -516,7 +485,7 @@ document.addEventListener('DOMContentLoaded', function () {
             sendRequest(userData);
         } else {
             // Campos obrigatórios não preenchidos
-            alert('Preencha todos os campos obrigatórios.');
+            showToast('error', 'Preencha todos os campos obrigatórios.');
         }
     });
 
@@ -607,6 +576,31 @@ document.addEventListener('DOMContentLoaded', function () {
             event.target.value = value.replace(/\d/g, '');
         }
     }
+
+    function showToast(status, message) {
+        const icons = {
+          success: 'success',
+          error: 'error'
+          // Adicione outros ícones conforme necessário
+        };
+      
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          }
+        });
+      
+        Toast.fire({
+          icon: icons[status],
+          title: message
+        });
+      }
 
 });
 

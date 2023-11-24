@@ -23,180 +23,124 @@
                         <hr class="my-0" />
                         <div class="card-body">
                         <form id="formAccountSettings" method="POST" onsubmit="return false">
-                            <div class="row">
-                            <div class="mb-3 col-md-6">
-                                <label for="firstName" class="form-label">First Name</label>
-                                <input
-                                class="form-control"
-                                type="text"
-                                id="firstName"
-                                name="firstName"
-                                value="John"
-                                autofocus
-                                />
-                            </div>
-                            <div class="mb-3 col-md-6">
-                                <label for="lastName" class="form-label">Last Name</label>
-                                <input class="form-control" type="text" name="lastName" id="lastName" value="Doe" />
-                            </div>
-                            <div class="mb-3 col-md-6">
-                                <label for="email" class="form-label">E-mail</label>
-                                <input
-                                class="form-control"
-                                type="text"
-                                id="email"
-                                name="email"
-                                value="john.doe@example.com"
-                                placeholder="john.doe@example.com"
-                                />
-                            </div>
-                            <div class="mb-3 col-md-6">
-                                <label for="organization" class="form-label">Organization</label>
-                                <input
-                                type="text"
-                                class="form-control"
-                                id="organization"
-                                name="organization"
-                                value="ThemeSelection"
-                                />
-                            </div>
-                            <div class="mb-3 col-md-6">
-                                <label class="form-label" for="phoneNumber">Phone Number</label>
-                                <div class="input-group input-group-merge">
-                                <span class="input-group-text">US (+1)</span>
-                                <input
-                                    type="text"
-                                    id="phoneNumber"
-                                    name="phoneNumber"
-                                    class="form-control"
-                                    placeholder="202 555 0111"
-                                />
+                                <div class="row mt-4">
+                                    <div class="mb-3 col-md-6">
+                                        <label for="firstName" class="form-label">Nome</label>
+                                        <input class="form-control" type="text" id="firstName" name="firstName" disabled />
+                                    </div>
+                                    <div class="mb-3 col-md-6">
+                                        <label for="motherName" class="form-label">Nome da Mãe</label>
+                                        <input class="form-control" type="text" id="motherName" name="motherName" disabled />
+                                    </div>
+                                    <!-- Adicione outros campos conforme necessário -->
                                 </div>
-                            </div>
-                            <div class="mb-3 col-md-6">
-                                <label for="address" class="form-label">Address</label>
-                                <input type="text" class="form-control" id="address" name="address" placeholder="Address" />
-                            </div>
-                            <div class="mb-3 col-md-6">
-                                <label for="state" class="form-label">State</label>
-                                <input class="form-control" type="text" id="state" name="state" placeholder="California" />
-                            </div>
-                            <div class="mb-3 col-md-6">
-                                <label for="zipCode" class="form-label">Zip Code</label>
-                                <input
-                                type="text"
-                                class="form-control"
-                                id="zipCode"
-                                name="zipCode"
-                                placeholder="231465"
-                                maxlength="6"
-                                />
-                            </div>
-                            <div class="mb-3 col-md-6">
-                                <label class="form-label" for="country">Country</label>
-                                <select id="country" class="select2 form-select">
-                                <option value="">Select</option>
-                                <option value="Australia">Australia</option>
-                                <option value="Bangladesh">Bangladesh</option>
-                                <option value="Belarus">Belarus</option>
-                                <option value="Brazil">Brazil</option>
-                                <option value="Canada">Canada</option>
-                                <option value="China">China</option>
-                                <option value="France">France</option>
-                                <option value="Germany">Germany</option>
-                                <option value="India">India</option>
-                                <option value="Indonesia">Indonesia</option>
-                                <option value="Israel">Israel</option>
-                                <option value="Italy">Italy</option>
-                                <option value="Japan">Japan</option>
-                                <option value="Korea">Korea, Republic of</option>
-                                <option value="Mexico">Mexico</option>
-                                <option value="Philippines">Philippines</option>
-                                <option value="Russia">Russian Federation</option>
-                                <option value="South Africa">South Africa</option>
-                                <option value="Thailand">Thailand</option>
-                                <option value="Turkey">Turkey</option>
-                                <option value="Ukraine">Ukraine</option>
-                                <option value="United Arab Emirates">United Arab Emirates</option>
-                                <option value="United Kingdom">United Kingdom</option>
-                                <option value="United States">United States</option>
-                                </select>
-                            </div>
-                            <div class="mb-3 col-md-6">
-                                <label for="language" class="form-label">Language</label>
-                                <select id="language" class="select2 form-select">
-                                <option value="">Select Language</option>
-                                <option value="en">English</option>
-                                <option value="fr">French</option>
-                                <option value="de">German</option>
-                                <option value="pt">Portuguese</option>
-                                </select>
-                            </div>
-                            <div class="mb-3 col-md-6">
-                                <label for="timeZones" class="form-label">Timezone</label>
-                                <select id="timeZones" class="select2 form-select">
-                                <option value="">Select Timezone</option>
-                                <option value="-12">(GMT-12:00) International Date Line West</option>
-                                <option value="-11">(GMT-11:00) Midway Island, Samoa</option>
-                                <option value="-10">(GMT-10:00) Hawaii</option>
-                                <option value="-9">(GMT-09:00) Alaska</option>
-                                <option value="-8">(GMT-08:00) Pacific Time (US & Canada)</option>
-                                <option value="-8">(GMT-08:00) Tijuana, Baja California</option>
-                                <option value="-7">(GMT-07:00) Arizona</option>
-                                <option value="-7">(GMT-07:00) Chihuahua, La Paz, Mazatlan</option>
-                                <option value="-7">(GMT-07:00) Mountain Time (US & Canada)</option>
-                                <option value="-6">(GMT-06:00) Central America</option>
-                                <option value="-6">(GMT-06:00) Central Time (US & Canada)</option>
-                                <option value="-6">(GMT-06:00) Guadalajara, Mexico City, Monterrey</option>
-                                <option value="-6">(GMT-06:00) Saskatchewan</option>
-                                <option value="-5">(GMT-05:00) Bogota, Lima, Quito, Rio Branco</option>
-                                <option value="-5">(GMT-05:00) Eastern Time (US & Canada)</option>
-                                <option value="-5">(GMT-05:00) Indiana (East)</option>
-                                <option value="-4">(GMT-04:00) Atlantic Time (Canada)</option>
-                                <option value="-4">(GMT-04:00) Caracas, La Paz</option>
-                                </select>
-                            </div>
-                            <div class="mb-3 col-md-6">
-                                <label for="currency" class="form-label">Currency</label>
-                                <select id="currency" class="select2 form-select">
-                                <option value="">Select Currency</option>
-                                <option value="usd">USD</option>
-                                <option value="euro">Euro</option>
-                                <option value="pound">Pound</option>
-                                <option value="bitcoin">Bitcoin</option>
-                                </select>
-                            </div>
-                            </div>
-                            <div class="mt-2">
-                            <button type="submit" class="btn btn-primary me-2">Save changes</button>
-                            <button type="reset" class="btn btn-outline-secondary">Cancel</button>
-                            </div>
-                        </form>
-                        </div>
-                        <!-- /Account -->
-                    </div>
-                    <div class="card">
-                    <h5 class="card-header">Excluir sua conta</h5>
-                        <div class="card-body">
-                            <div class="mb-3 col-12 mb-0">
-                                <div class="alert alert-warning">
-                                    <h6 class="alert-heading fw-bold mb-1">Você tem certeza de que deseja excluir sua conta?</h6>
-                                    <p class="mb-0">Uma vez que você exclua sua conta, não há como voltar atrás. Por favor, tenha certeza.</p>
+                                <div class="row">
+                                    <div class="mb-3 col-md-6">
+                                        <label for="email" class="form-label">Email</label>
+                                        <input class="form-control" type="text" id="email" name="email" />
+                                    </div>
+                                    <div class="mb-3 col-md-6">
+                                        <label for="cpf" class="form-label">CPF</label>
+                                        <input class="form-control" type="text" id="cpf" name="cpf" disabled/>
+                                    </div>                                          
                                 </div>
-                            </div>
-                            <form id="formAccountDeactivation" onsubmit="return false">
-                                <div class="form-check mb-3">
-                                    <input
-                                        class="form-check-input"
-                                        type="checkbox"
-                                        name="accountActivation"
-                                        id="accountActivation"
-                                    />
-                                    <label class="form-check-label" for="accountActivation"
-                                        >Confirmo a desativação da minha conta</label
-                                    >
+                                <div class="row">
+                                    <div class="mb-3 col-md-6">
+                                        <label for="dataNascimento" class="form-label">Data de Nascimento</label>
+                                        <input class="form-control" type="date" id="dataNascimento" name="dataNascimento" disabled />
+                                    </div>
+                                    <div class="mb-3 col-md-6">
+                                        <label for="sexo" class="form-label">Sexo</label>
+                                        <select id="sexo" class="select2 form-select" disabled>
+                                         <option value="Outros">Outros</option>
+                                          <option value="Masculino">Masculino</option>
+                                          <option value="Feminino">Feminino</option>
+                                        </select>
+                                    </div>                                          
                                 </div>
-                                <button type="submit" class="btn btn-danger deactivate-account">Desativar Conta</button>
+                                <div class="row">
+                                    <div class="mb-3 col-md-6">
+                                        <label for="tel" class="form-label">Telefone</label>
+                                        <input class="form-control" type="text" id="tel" name="tel" />
+                                    </div>
+                                    <div class="mb-3 col-md-6">
+                                        <label for="cel" class="form-label">Celular</label>
+                                        <input class="form-control" type="text" id="cel" name="cel" />
+                                    </div>                                          
+                                </div>
+                                <div class="row">
+                                    <div class="mb-3 col-md-6">
+                                        <label for="cep" class="form-label">Cep</label>
+                                        <input class="form-control" type="text" id="cep" name="cep" />
+                                    </div>
+
+                                    <div class="mb-3 col-md-6">
+                                      <label class="form-label" for="estado">Estado</label>
+                                      <select id="estado" name="estado" class="select2 form-select">
+                                          <option value="AC">Acre</option>
+                                          <option value="AL">Alagoas</option>
+                                          <option value="AP">Amapá</option>
+                                          <option value="AM">Amazonas</option>
+                                          <option value="BA">Bahia</option>
+                                          <option value="CE">Ceará</option>
+                                          <option value="DF">Distrito Federal</option>
+                                          <option value="ES">Espírito Santo</option>
+                                          <option value="GO">Goiás</option>
+                                          <option value="MA">Maranhão</option>
+                                          <option value="MT">Mato Grosso</option>
+                                          <option value="MS">Mato Grosso do Sul</option>
+                                          <option value="MG">Minas Gerais</option>
+                                          <option value="PA">Pará</option>
+                                          <option value="PB">Paraíba</option>
+                                          <option value="PR">Paraná</option>
+                                          <option value="PE">Pernambuco</option>
+                                          <option value="PI">Piauí</option>
+                                          <option value="RJ">Rio de Janeiro</option>
+                                          <option value="RN">Rio Grande do Norte</option>
+                                          <option value="RS">Rio Grande do Sul</option>
+                                          <option value="RO">Rondônia</option>
+                                          <option value="RR">Roraima</option>
+                                          <option value="SC">Santa Catarina</option>
+                                          <option value="SP">São Paulo</option>
+                                          <option value="SE">Sergipe</option>
+                                          <option value="TO">Tocantins</option>
+                                      </select>
+                                  </div>
+                                                                                                         
+                                </div>
+                                <div class="row">
+                                    <div class="mb-3 col-md-6">
+                                        <label for="cidade" class="form-label">Cidade</label>
+                                        <input class="form-control" type="text" id="cidade" name="cidade" />
+                                    </div>    
+                                    <div class="mb-3 col-md-6">
+                                        <label for="complemento" class="form-label">Complemento</label>
+                                        <input class="form-control" type="text" id="complemento" name="complemento" />
+                                    </div>                                          
+                                </div>
+                                <div class="row">
+                                    <div class="mb-3 col-md-6">
+                                        <label for="endereco" class="form-label">Endereço</label>
+                                        <input class="form-control" type="text" id="endereco" name="endereco" />
+                                        
+                                    </div>      
+                                    <div class="mb-3 col-md-6">
+                                        <label for="numeroEndereco" class="form-label">Nº</label>
+                                        <input class="form-control" type="text" id="numeroEndereco" name="numeroEndereco" />
+                                    </div>                                                                         
+                                </div>                                
+                                <div class="row">
+                                    <div class="mb-3 col-md-6">
+                                        <label for="login" class="form-label">Login</label>
+                                        <input class="form-control" type="text" id="login" name="login" />
+                                    </div>                                       
+                                </div>
+
+                                <!-- Adicione mais divs com campos adicionais conforme necessário -->
+                                <div class="mt-2 d-flex justify-content-end">
+                                    <button type="reset" class="btn btn-outline-secondary mr-2" data-bs-dismiss="modal">Cancelar</button>
+                                    <button type="button" class="btn btn-primary me-2">Salvar alterações</button>                                    
+                                </div>
                             </form>
                         </div>
                     </div>
@@ -209,11 +153,13 @@
           </div>
         </div>
       </div>
+      <span class="text-primary" id='id_user'><?php echo $_SESSION['user_id'];?></span>  
 
       <div class="layout-overlay layout-menu-toggle"></div>
     </div>
   </body>
 
+  <script src="assets\js\scripts_pages\Profile\profile.js"></script>
 </html>
 
 

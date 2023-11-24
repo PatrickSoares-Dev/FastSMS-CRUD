@@ -27,13 +27,7 @@ SET time_zone = "+00:00";
 -- Estrutura para tabela `logs`
 --
 
-CREATE TABLE `logs` (
-  `id` int(11) NOT NULL,
-  `email_usuario` varchar(255) DEFAULT NULL,
-  `tipo_acao` varchar(50) DEFAULT NULL,
-  `descricao_log` varchar(255) DEFAULT NULL,
-  `data_log` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 
 --
 -- Despejando dados para a tabela `logs`
@@ -98,16 +92,22 @@ CREATE TABLE `usuarios` (
   `tipo_user` enum('User','Admin') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+
+CREATE TABLE `logs` (
+  `id` int(11) NOT NULL,
+  `email_usuario` varchar(255) DEFAULT NULL,
+  `tipo_acao` varchar(50) DEFAULT NULL,
+  `descricao_log` varchar(255) DEFAULT NULL,
+  `data_log` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 --
 -- Despejando dados para a tabela `usuarios`
 --
 
 INSERT INTO `usuarios` (`id`, `nome`, `mae`, `cpf`, `dataNascimento`, `email`, `login`, `senha`, `tel`, `sexo`, `cep`, `estado`, `cidade`, `numeroEndereco`, `endereco`, `complemento`, `celular`, `tipo_user`) VALUES
 (10, 'MARIA Costa da Silva Costa', 'Luzia Soares do Couto', '176.321.007-11', '2005-03-07', 'patrick@gmail.com', 'patrickp', 'patrickp', '(21) 9960-2608', 'Masculino', '23092-060', 'RJ', 'Rio de Janeiro', '9', 'Rua Campina Grande, 09 CA 09', 'Apartamento', '(21) 99602-6088', 'Admin'),
-(18, 'Fernando Oliveira', 'Ricardo Oliveira', '111.222.333-44', '1985-10-15', 'fernando@example.com', 'fernando_oliveira', 'hashed_password', '(21) 8765-4321', 'Masculino', '23456-789', 'RJ', 'Niterói', '789', 'Rua da Praia, 789', 'Casa 15', '(21) 3333-3333', 'User'),
-(20, 'Ricardo Silva', 'Carlos Silva', '555.444.333-22', '1980-01-05', 'ricardo@example.com', 'ricardo_silva', 'hashed_password', '(41) 1234-5678', 'Masculino', '98765-432', 'PR', 'Curitiba', '888', 'Avenida Teste, 888', 'Bloco C', '(41) 7654-3210', 'User'),
-(21, 'Sara Almeida', 'Ana Almeida', '444.555.666-77', '1989-09-20', 'sara@example.com', 'sara_almeida', 'hashed_password', '(85) 8888-9999', 'Feminino', '65432-109', 'CE', 'Fortaleza', '1010', 'Rua dos Testes, 1010', 'Casa 25', '(85) 9999-8888', 'User'),
-(22, 'Bruno Oliveira', 'Marcos Oliveira', '888.999.000-11', '1978-07-30', 'bruno@example.com', 'bruno_oliveira', 'hashed_password', '(61) 2345-6789', 'Masculino', '12345-678', 'DF', 'Brasília', '1212', 'Rua das Esquinas, 1212', 'Apto 15', '(61) 9876-5432', 'User');
+(18, 'Fernando Oliveira', 'Ricardo Oliveira', '111.222.333-44', '1985-10-15', 'fernando@example.com', 'fernando_oliveira', 'hashed_password', '(21) 8765-4321', 'Masculino', '23456-789', 'RJ', 'Niterói', '789', 'Rua da Praia, 789', 'Casa 15', '(21) 3333-3333', 'User');
 
 --
 -- Índices para tabelas despejadas

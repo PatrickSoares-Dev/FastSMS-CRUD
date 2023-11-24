@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         ...user 
                     }));
 
+
                     initDataTable(usersData);
                 } else {
                     console.error('Erro ao buscar usuários:', data.message);
@@ -138,7 +139,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 { label: 'Sexo:', name: 'sexo' },
                 { label: 'Estado:', name: 'estado' },
                 { label: 'Cidade:', name: 'cidade' },
-                { label: 'Número do Endereço:', name: 'numeroEndereco' },
+                { label: 'Numero do Endereco:', name: 'numeroEndereco' },
                 { label: 'Endereço:', name: 'endereco' },
                 { label: 'Complemento:', name: 'complemento' },
                 { label: 'Celular:', name: 'celular' },
@@ -643,6 +644,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             let estadoSelect = userDetailsModal.querySelector('#estado');
                             let cidadeInput = userDetailsModal.querySelector('#cidade');
                             let complementoInput = userDetailsModal.querySelector('#complemento');
+                            let numeroEnderecoInput = userDetailsModal.querySelector('#numeroEndereco');
                             let enderecoInput = userDetailsModal.querySelector('#endereco');
                             let loginInput = userDetailsModal.querySelector('#login');
                             let tipoUserSelect = userDetailsModal.querySelector('#tipo_user');
@@ -659,6 +661,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             estadoSelect.value = userData.estado;
                             cidadeInput.value = userData.cidade;
                             complementoInput.value = userData.complemento;
+                            numeroEnderecoInput.value = userData.numeroEndereco;
                             enderecoInput.value = userData.endereco;
                             loginInput.value = userData.login;
                             tipoUserSelect.value = userData.tipo_user;
