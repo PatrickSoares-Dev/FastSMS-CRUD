@@ -477,8 +477,6 @@
 										<input type="password" class="form-control" id="input_senha"
 											placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
 											aria-describedby="input_senha" autocomplete="new-password" maxlength="8"/>
-										<span class="input-group-text cursor-pointer" id="basic-default-password"><i
-												class="bx bx-hide"></i></span>
 									</div>
 								</div>
 							</div>
@@ -489,8 +487,6 @@
 										<input type="password" class="form-control" id="input_csenha"
 											placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
 											aria-describedby="input_csenha" maxlength="8"/>
-										<span class="input-group-text cursor-pointer" id="basic-default-password"><i
-												class="bx bx-hide"></i></span>
 									</div>
 								</div>
 							</div>

@@ -6,11 +6,13 @@ document.addEventListener('DOMContentLoaded', function () {
             contentType: 'application/x-www-form-urlencoded',
             success: function (data) {
                 if (data.status === "success") {
+                    console.log(data);
                     const usersData = data.data.data.map(user => ({
                         DT_RowId: user.id, 
                         ...user 
                     }));
 
+                    console.log(usersData);
 
                     initDataTable(usersData);
                 } else {
@@ -23,11 +25,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    function destroyAndRecreateTable() {
-        $('#TableUsers').DataTable().destroy();
-        $('#TableUsers').remove();
-        getUser()
-    }
 
     let updatedFields = {};
 
@@ -191,7 +188,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 {
                     text: 'Novo',
                     className: 'btn btn-primary',
-                    action: function () {                                                
+                    action: function () {                                                                    
 
                         let userCreateModal = document.getElementById('userCreateModal');
                         let btnCreateUser = document.querySelector("#btnCreateUser");
@@ -626,6 +623,8 @@ document.addEventListener('DOMContentLoaded', function () {
                         let selectedRows = dt.rows({ selected: true }).data();
                         if (selectedRows.length > 0) {
                             let userData = selectedRows[0]; // Dados do usuário selecionado
+
+                            console.log(userData)
                             
                             let tittleUser = document.querySelector("#tittleUser")
                             tittleUser.textContent = ('Usuário: ' + userData.login + " - " + userData.id)
@@ -720,7 +719,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     getUser(); 
        
-
     function showToast(status, message) {
         const icons = {
           success: 'success',
